@@ -1,65 +1,189 @@
-import Image from "next/image";
+'use client'
+import { useState, useEffect, useCallback } from 'react'
+import { SidebarProvider, SidebarInset, SidebarTrigger } from '@/components/ui/sidebar'
+import { Separator } from '@/components/ui/separator'
+import { AppSidebar } from '@/components/AppSidebar'
+import KPIBar from '@/components/KPIBar'
+import AgentPanel, { type AgentState } from '@/components/AgentPanel'
+import CFOBriefing from '@/components/CFOBriefing'
+import TransactionExplorer from '@/components/TransactionExplorer'
+import ActionItemsPanel from '@/components/ActionItemsPanel'
+import parseAgentOutput from '@/lib/utils/parseAgentOutput'
+
+type AgentKey = 'briefing' | 'cash-reporter' | 'cash-forecast' | 'budget-analyst' | 'ar-collections' | 'ap-vendor' | 'contract-watchdog'
+type Tab = AgentKey | 'transactions' | 'actions'
+
+interface ActionItem { id: number; created_at: string; source_agent: string; description: string; amount: number; owner: string; due_date: string; status: string; notes: string }
+
+const AGENT_CONFIG: Record<AgentKey, { label: string; model: string; provider: string; emoji: string }> = {
+  'briefing':          { label: 'CFO Briefing',  model: 'DeepSeek-V3.2',          provider: 'SambaNova', emoji: '🏦' },
+  'cash-reporter':     { label: 'Cash Position',  model: 'gpt-oss-120b',            provider: 'Cerebras',  emoji: '💵' },
+  'cash-forecast':     { label: 'Cash Forecast',  model: 'llama-3.3-70b-versatile', provider: 'Groq',      emoji: '📈' },
+  'budget-analyst':    { label: 'Budget',          model: 'llama-3.3-70b-versatile', provider: 'Groq',      emoji: '📊' },
+  'ar-collections':    { label: 'Collections',    model: 'llama-3.3-70b-versatile', provider: 'Groq',      emoji: '📥' },
+  'ap-vendor':         { label: 'Payables',        model: 'DeepSeek-V3.2',           provider: 'SambaNova', emoji: '📤' },
+  'contract-watchdog': { label: 'Contracts',       model: 'llama-3.3-70b-versatile', provider: 'Groq',      emoji: '📋' },
+}
+
+const AGENT_KEYS: AgentKey[] = ['briefing','cash-reporter','cash-forecast','budget-analyst','ar-collections','ap-vendor','contract-watchdog']
+
+function emptyState(): AgentState {
+  return { status: 'idle', lastRun: null, dataScanned: [], reasoningSteps: [], conclusions: [], report: '', isStreaming: false }
+}
 
 export default function Home() {
+  const [activeTab, setActiveTab] = useState<Tab>('briefing')
+  const [agents, setAgents] = useState<Record<AgentKey, AgentState>>(
+    () => Object.fromEntries(AGENT_KEYS.map(k => [k, emptyState()])) as Record<AgentKey, AgentState>
+  )
+  const [isRunning, setIsRunning] = useState(false)
+  const [actionItems, setActionItems] = useState<ActionItem[]>([])
+
+  const reloadActions = useCallback(() => {
+    fetch('/api/action-items').then(r => r.json()).then(setActionItems).catch(() => {})
+  }, [])
+
+  // Load on mount
+  useEffect(() => {
+    reloadActions()
+    // Load latest agent outputs
+    AGENT_KEYS.forEach(key => {
+      const route = key === 'briefing' ? 'cfo-briefing' : key
+      fetch(`/api/agents/${route}`).then(r => r.json()).then(row => {
+        if (!row?.raw_json) return
+        try {
+          const { parsed } = JSON.parse(String(row.raw_json))
+          if (parsed) {
+            setAgents(prev => ({
+              ...prev,
+              [key]: { ...emptyState(), status: 'complete', lastRun: new Date(row.run_at), ...parsed },
+            }))
+          }
+        } catch {}
+      }).catch(() => {})
+    })
+  }, [reloadActions])
+
+  async function handleRunAll() {
+    setIsRunning(true)
+    setAgents(prev => {
+      const next = { ...prev }
+      AGENT_KEYS.forEach(k => { next[k] = { ...emptyState(), status: 'running' } })
+      return next
+    })
+
+    try {
+      const res = await fetch('/api/agents/run-all', { method: 'POST' })
+      const data = await res.json()
+
+      const keyMap: Record<string, AgentKey> = {
+        cashReporter: 'cash-reporter', cashForecast: 'cash-forecast',
+        budgetAnalyst: 'budget-analyst', arCollections: 'ar-collections',
+        apVendor: 'ap-vendor', contractWatchdog: 'contract-watchdog', cfoBriefing: 'briefing',
+      }
+
+      setAgents(prev => {
+        const next = { ...prev }
+        for (const [dataKey, agentKey] of Object.entries(keyMap)) {
+          const result = data[dataKey]
+          next[agentKey] = result?.parsed ? {
+            status: result.error ? 'error' : 'complete',
+            lastRun: new Date(),
+            dataScanned: result.parsed.dataScanned ?? [],
+            reasoningSteps: result.parsed.reasoningSteps ?? [],
+            conclusions: result.parsed.conclusions ?? [],
+            report: result.parsed.report ?? '',
+            isStreaming: false,
+          } : { ...emptyState(), status: 'error', lastRun: new Date() }
+        }
+        return next
+      })
+      reloadActions()
+    } catch (err) {
+      console.error(err)
+      setAgents(prev => {
+        const next = { ...prev }
+        AGENT_KEYS.forEach(k => { if (next[k].status === 'running') next[k] = { ...next[k], status: 'error' } })
+        return next
+      })
+    } finally {
+      setIsRunning(false)
+    }
+  }
+
+  async function handleRerun(key: AgentKey) {
+    const route = key === 'briefing' ? 'cfo-briefing' : key
+    setAgents(prev => ({ ...prev, [key]: { ...prev[key], status: 'running' } }))
+    try {
+      const res = await fetch(`/api/agents/${route}`, { method: 'POST' })
+      const data = await res.json()
+      if (data.parsed) {
+        setAgents(prev => ({
+          ...prev,
+          [key]: { status: 'complete', lastRun: new Date(), dataScanned: data.parsed.dataScanned ?? [], reasoningSteps: data.parsed.reasoningSteps ?? [], conclusions: data.parsed.conclusions ?? [], report: data.parsed.report ?? '', isStreaming: false },
+        }))
+      }
+    } catch {
+      setAgents(prev => ({ ...prev, [key]: { ...prev[key], status: 'error' } }))
+    }
+    reloadActions()
+  }
+
+  const openActionCount = actionItems.filter(i => i.status !== 'done').length
+  const PAGE_TITLE: Record<Tab, string> = {
+    briefing: 'CFO Briefing', 'cash-reporter': 'Cash Position', 'cash-forecast': 'Cash Forecast',
+    'budget-analyst': 'Budget', 'ar-collections': 'Collections', 'ap-vendor': 'Payables',
+    'contract-watchdog': 'Contracts', transactions: 'Transactions', actions: 'Action Items',
+  }
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+    <SidebarProvider>
+      <AppSidebar
+        activeTab={activeTab as AgentKey}
+        onTabChange={tab => setActiveTab(tab as Tab)}
+        agentStates={Object.fromEntries(AGENT_KEYS.map(k => [k, agents[k]]))}
+        openActionCount={openActionCount}
+        isRunning={isRunning}
+        onRunAll={handleRunAll}
+      />
+      <SidebarInset className="flex flex-col h-screen overflow-hidden">
+        {/* Top bar */}
+        <header className="flex items-center gap-2 border-b border-border px-4 py-3 flex-shrink-0">
+          <SidebarTrigger className="-ml-1" />
+          <Separator orientation="vertical" className="h-4 mx-1" />
+          <h2 className="text-sm font-medium text-foreground">{PAGE_TITLE[activeTab]}</h2>
+        </header>
+
+        {/* KPI Bar */}
+        <KPIBar runStatus={isRunning ? 'running' : 'idle'} />
+
+        {/* Main content */}
+        <main className="flex-1 overflow-y-auto">
+          {activeTab === 'briefing' && (
+            <CFOBriefing
+              state={agents['briefing']}
+              agentStates={Object.fromEntries(AGENT_KEYS.filter(k => k !== 'briefing').map(k => [k, agents[k]]))}
+              onJumpToTab={tab => setActiveTab(tab as Tab)}
+              actionItems={actionItems}
+              onReloadActions={reloadActions}
+              onRerun={() => handleRerun('briefing')}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
+          )}
+          {(AGENT_KEYS.filter(k => k !== 'briefing') as AgentKey[]).map(key => activeTab === key && (
+            <AgentPanel
+              key={key}
+              agentKey={key}
+              agentName={`${AGENT_CONFIG[key].emoji} ${AGENT_CONFIG[key].label}`}
+              model={AGENT_CONFIG[key].model}
+              provider={AGENT_CONFIG[key].provider}
+              state={agents[key]}
+              onRerun={() => handleRerun(key)}
+            />
+          ))}
+          {activeTab === 'transactions' && <TransactionExplorer />}
+          {activeTab === 'actions' && <ActionItemsPanel items={actionItems} onUpdate={reloadActions} />}
+        </main>
+      </SidebarInset>
+    </SidebarProvider>
+  )
 }

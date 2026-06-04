@@ -1,0 +1,11 @@
+import { NextResponse } from 'next/server'
+import { getARAging } from '@/lib/db/queries'
+
+export async function GET() {
+  try {
+    const rows = await getARAging()
+    return NextResponse.json(rows)
+  } catch (err) {
+    return NextResponse.json({ error: String(err) }, { status: 500 })
+  }
+}

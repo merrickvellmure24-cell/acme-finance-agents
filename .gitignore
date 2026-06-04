@@ -33,6 +33,9 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
+# source data files (loaded into Turso via ingest; not needed at runtime)
+/data/
+
 # vercel
 .vercel
 
