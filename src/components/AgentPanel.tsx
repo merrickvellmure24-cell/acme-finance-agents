@@ -62,11 +62,14 @@ export default function AgentPanel({ agentKey, agentName, model, provider, state
     return (
       <div className="flex flex-col">
         <AgentStatusBar agentKey={agentKey} agentName={agentName} model={model} provider={provider} lastRun={null} status="idle" onRerun={onRerun} />
-        {/* Charts always show live data even before agent runs */}
+        {DESCRIPTIONS[agentKey] && (
+          <div className="px-4 py-3 border-b border-border bg-muted/20">
+            <p className="text-xs text-muted-foreground leading-relaxed">{DESCRIPTIONS[agentKey]}</p>
+          </div>
+        )}
         <AgentCharts agentKey={agentKey} />
         <div className="flex flex-col items-center justify-center text-center px-8 py-8">
-          <p className="text-muted-foreground/50 text-sm max-w-md leading-relaxed">{DESCRIPTIONS[agentKey] ?? ''}</p>
-          <p className="text-muted-foreground/30 text-sm mt-3">Click <span className="text-primary">▶ Run All</span> to get AI analysis.</p>
+          <p className="text-muted-foreground/30 text-sm">Click <span className="text-primary">▶ Run All Agents</span> to get AI analysis of this data.</p>
         </div>
         <div data-agent-chat={agentKey}><AgentChat agent={agentKey} /></div>
       </div>
@@ -89,6 +92,11 @@ export default function AgentPanel({ agentKey, agentName, model, provider, state
   return (
     <div className="flex flex-col overflow-y-auto">
       <AgentStatusBar agentKey={agentKey} agentName={agentName} model={model} provider={provider} lastRun={state.lastRun} status={state.status} onRerun={onRerun} />
+      {DESCRIPTIONS[agentKey] && (
+        <div className="px-4 py-2.5 border-b border-border bg-muted/20">
+          <p className="text-xs text-muted-foreground leading-relaxed">{DESCRIPTIONS[agentKey]}</p>
+        </div>
+      )}
 
       {/* Live data visualizations — always rendered */}
       <AgentCharts agentKey={agentKey} />

@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 
 interface Metrics { totalCash: number; monthlyBurn: number; runway: number; arOverdue: number; apRisk: number; totalAR: number; totalAP: number; lastRun: string | null }
 
@@ -22,12 +23,13 @@ function timeAgo(iso: string | null) {
 interface KPICardProps {
   label: string
   value: string
+  tooltip: string
   badge?: { label: string; variant: 'default' | 'secondary' | 'destructive' | 'outline' }
   sub?: string
   accent?: 'red' | 'yellow' | 'green' | 'neutral'
 }
 
-function KPICard({ label, value, badge, sub, accent = 'neutral' }: KPICardProps) {
+function KPICard({ label, value, tooltip, badge, sub, accent = 'neutral' }: KPICardProps) {
   const borderClass = {
     red: 'border-l-2 border-l-red-500',
     yellow: 'border-l-2 border-l-yellow-400',
@@ -37,7 +39,17 @@ function KPICard({ label, value, badge, sub, accent = 'neutral' }: KPICardProps)
 
   return (
     <Card className={`px-4 py-3 flex flex-col gap-1 bg-card border-border ${borderClass}`}>
-      <p className="text-[11px] text-muted-foreground uppercase tracking-wider font-medium">{label}</p>
+      <Tooltip>
+        <TooltipTrigger>
+          <p className="text-[11px] text-muted-foreground uppercase tracking-wider font-medium cursor-default w-fit flex items-center gap-1">
+            {label}
+            <span className="text-muted-foreground/30 text-[9px]">ⓘ</span>
+          </p>
+        </TooltipTrigger>
+        <TooltipContent side="bottom" className="max-w-xs text-xs leading-relaxed">
+          {tooltip}
+        </TooltipContent>
+      </Tooltip>
       <div className="flex items-baseline gap-2">
         <p className="text-2xl font-semibold text-foreground tabular-nums">{value}</p>
         {badge && <Badge variant={badge.variant} className="text-[10px] h-5">{badge.label}</Badge>}
@@ -97,6 +109,7 @@ export default function KPIBar({ runStatus }: { runStatus: 'idle' | 'running' })
         <KPICard
           label="Cash on Hand"
           value={fmt(m.totalCash)}
+          tooltip="Total cash available to the company — operating account ($11.18M) plus a reserved buffer ($1.5M). The monthly burn rate tells you how fast this is being spent."
           sub={`Operating + Reserve · ${fmt(m.monthlyBurn)}/mo burn`}
           accent={burnAccent}
           badge={burnPct > 0 ? { label: `+${burnPct}% over guidance`, variant: 'destructive' as const } : undefined}
@@ -104,6 +117,7 @@ export default function KPIBar({ runStatus }: { runStatus: 'idle' | 'running' })
         <KPICard
           label="Runway"
           value={`~${m.runway}mo`}
+          tooltip="How many months until the company runs out of cash at the current burn rate. Formula: Total Cash ÷ Monthly Burn. Target is 18+ months — below 12 months is critical for a Series B company."
           badge={runwayBadge}
           sub={`Target: ${TARGET_RUNWAY_MO}mo · ${runwayDelta >= 0 ? '+' : ''}${runwayDelta.toFixed(1)}mo vs target`}
           accent={runwayAccent}
@@ -111,6 +125,7 @@ export default function KPIBar({ runStatus }: { runStatus: 'idle' | 'running' })
         <KPICard
           label="AR Overdue"
           value={fmt(m.arOverdue)}
+          tooltip="Accounts Receivable (AR) — money that customers owe the company for services already delivered. 'Overdue' means the invoice payment deadline has passed. Overdue AR tightens cash flow."
           badge={arBadge}
           sub={m.totalAR > 0 ? `${arPct}% of $${(m.totalAR / 1e3).toFixed(0)}K total AR` : 'Outstanding receivables'}
           accent={arAccent}
@@ -118,6 +133,7 @@ export default function KPIBar({ runStatus }: { runStatus: 'idle' | 'running' })
         <KPICard
           label="AP at Risk"
           value={fmt(m.apRisk)}
+          tooltip="Accounts Payable (AP) at Risk — vendor invoices flagged by the AI audit as potentially duplicate, unauthorized, or disputed. These should be reviewed before payment is released."
           sub={m.totalAP > 0 ? `${apPct}% of $${(m.totalAP / 1e3).toFixed(0)}K total AP · ${timeAgo(m.lastRun)}` : `Analysis: ${timeAgo(m.lastRun)}`}
           accent={m.apRisk > 50000 ? 'yellow' : 'neutral'}
         />

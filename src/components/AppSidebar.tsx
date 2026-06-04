@@ -1,4 +1,5 @@
 'use client'
+import Link from 'next/link'
 import {
   Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupLabel,
   SidebarHeader, SidebarMenu, SidebarMenuBadge, SidebarMenuButton, SidebarMenuItem, SidebarSeparator,
@@ -46,9 +47,18 @@ export function AppSidebar({ activeTab, onTabChange, agentStates, openActionCoun
   return (
     <Sidebar className="border-r border-border">
       <SidebarHeader className="px-4 py-3 border-b border-border">
-        <div>
-          <p className="text-xs text-muted-foreground font-mono uppercase tracking-widest">Acme Robotics</p>
-          <h1 className="text-sm font-semibold text-foreground leading-tight">Finance Command Center</h1>
+        <div className="flex items-start justify-between">
+          <div>
+            <p className="text-xs text-muted-foreground font-mono uppercase tracking-widest">Acme Robotics</p>
+            <h1 className="text-sm font-semibold text-foreground leading-tight">Finance Command Center</h1>
+          </div>
+          <Link
+            href="/welcome"
+            title="Platform Guide — start here if you're new"
+            className="mt-0.5 flex-shrink-0 w-5 h-5 rounded-full border border-border text-[10px] text-muted-foreground/60 hover:text-foreground hover:border-foreground/40 flex items-center justify-center transition"
+          >
+            ?
+          </Link>
         </div>
       </SidebarHeader>
 
