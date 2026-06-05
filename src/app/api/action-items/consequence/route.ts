@@ -1,5 +1,5 @@
 import { streamText } from 'ai'
-import { AGENT_MODELS } from '@/lib/llm'
+import { sambanova } from '@/lib/llm'
 import { getARAging, getAPAging, getBudget, getVendors, getCashBalance } from '@/lib/db/queries'
 
 function buildPrompt(
@@ -136,9 +136,8 @@ export async function POST(req: Request) {
   const userPrompt = buildPrompt(description, sourceAgent, Number(amount ?? 0), decision, delegateName, delegateDept)
     + `\n\nRelevant financial data for context:\n${JSON.stringify(context, null, 2)}`
 
-  const m = AGENT_MODELS['chat']
   const result = streamText({
-    model: m.provider(m.model),
+    model: sambanova('DeepSeek-V3.2'),
     system: `You are the CFO of Acme Robotics (Series B, $12.68M cash, 47 employees). Generate a professional, ready-to-use business document. Be specific with names, amounts, and dates from the context. Output ONLY the requested document — no preamble, no explanation, no commentary.`,
     messages: [{ role: 'user', content: userPrompt }],
     maxOutputTokens: 700,

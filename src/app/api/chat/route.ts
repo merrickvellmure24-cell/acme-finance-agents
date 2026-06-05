@@ -1,5 +1,5 @@
 import { streamText } from 'ai'
-import { AGENT_MODELS } from '@/lib/llm'
+import { cerebras } from '@/lib/llm'
 import { getCashBalance, getTransactions, getBudget, getAPAging, getARAging, getVendors, getLatestAgentOutput } from '@/lib/db/queries'
 
 const COMPANY_CONTEXT = `
@@ -70,9 +70,8 @@ ${itemContext ? `\nCurrently helping the CFO with this specific action item: ${i
 Current financial data:
 ${JSON.stringify(context, null, 2)}`
 
-  const m = AGENT_MODELS['chat']
   const result = streamText({
-    model: m.provider(m.model),
+    model: cerebras('gpt-oss-120b'),
     system: systemPrompt,
     messages,
   })

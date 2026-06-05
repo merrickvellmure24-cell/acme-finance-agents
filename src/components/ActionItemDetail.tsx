@@ -81,6 +81,7 @@ function Inner({ item, onClose, onUpdate }: { item: ActionItem; onClose: () => v
 
   const [analysis, setAnalysis] = useState('')
   const [analyzing, setAnalyzing] = useState(false)
+  const [analysisError, setAnalysisError] = useState(false)
   const [chatTab, setChatTab] = useState<'decision' | 'chat'>('decision')
   const [chatMessages, setChatMessages] = useState<ChatMsg[]>([])
   const [chatInput, setChatInput] = useState('')
@@ -89,9 +90,10 @@ function Inner({ item, onClose, onUpdate }: { item: ActionItem; onClose: () => v
   const artifactAbortRef = useRef<AbortController | null>(null)
 
   // Auto-load streaming analysis when drawer opens (only if not yet decided)
-  useEffect(() => {
+  function loadAnalysis() {
     if (existingDecision) return
     setAnalysis('')
+    setAnalysisError(false)
     setAnalyzing(true)
     const ctrl = new AbortController()
     fetch('/api/action-items/analyze', {
@@ -100,16 +102,27 @@ function Inner({ item, onClose, onUpdate }: { item: ActionItem; onClose: () => v
       body: JSON.stringify({ description: item.description, sourceAgent: item.source_agent, amount: item.amount }),
       signal: ctrl.signal,
     }).then(async res => {
-      if (!res.body) return
+      if (!res.body) { setAnalysisError(true); return }
       const reader = res.body.getReader()
       const dec = new TextDecoder()
+      let full = ''
       while (true) {
         const { done, value } = await reader.read()
         if (done) break
-        setAnalysis(prev => prev + dec.decode(value, { stream: true }))
+        full += dec.decode(value, { stream: true })
+        setAnalysis(full)
       }
-    }).catch(() => {}).finally(() => setAnalyzing(false))
+      if (!full.trim()) setAnalysisError(true)
+    }).catch(err => {
+      if ((err as Error).name !== 'AbortError') setAnalysisError(true)
+    }).finally(() => setAnalyzing(false))
     return () => ctrl.abort()
+  }
+
+  useEffect(() => {
+    const cleanup = loadAnalysis()
+    return cleanup
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [item.id])
 
   useEffect(() => {
@@ -422,9 +435,15 @@ function Inner({ item, onClose, onUpdate }: { item: ActionItem; onClose: () => v
               {/* AI Analysis sections */}
               {(analyzing && !analysis) ? (
                 <div className="space-y-3 animate-pulse">
-                  {[120, 80, 100, 90].map((w, i) => (
+                  {[100, 80, 90, 85].map((w, i) => (
                     <div key={i} className="h-3 bg-muted rounded" style={{ width: `${w}%` }} />
                   ))}
+                  <p className="text-xs text-muted-foreground/40 pt-1">Analyzing with SambaNova DeepSeek-V3.2…</p>
+                </div>
+              ) : analysisError ? (
+                <div className="rounded-lg border border-border bg-muted/20 p-4 text-center space-y-2">
+                  <p className="text-xs text-muted-foreground">Could not load analysis — the AI provider may be temporarily busy.</p>
+                  <button onClick={loadAnalysis} className="text-xs text-primary hover:underline">↺ Retry analysis</button>
                 </div>
               ) : analysis ? (
                 <div className="space-y-4">

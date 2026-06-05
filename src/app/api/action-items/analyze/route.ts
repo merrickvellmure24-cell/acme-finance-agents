@@ -1,5 +1,5 @@
 import { streamText } from 'ai'
-import { AGENT_MODELS } from '@/lib/llm'
+import { sambanova } from '@/lib/llm'
 import { getCashBalance, getBudget, getAPAging, getARAging, getVendors } from '@/lib/db/queries'
 
 export async function POST(req: Request) {
@@ -44,9 +44,8 @@ Keep responses tight and executive-level. Use numbers.
 Financial data context:
 ${JSON.stringify(context, null, 2)}`
 
-  const m = AGENT_MODELS['chat']
   const result = streamText({
-    model: m.provider(m.model),
+    model: sambanova('DeepSeek-V3.2'),
     system: systemPrompt,
     messages: [{
       role: 'user',
