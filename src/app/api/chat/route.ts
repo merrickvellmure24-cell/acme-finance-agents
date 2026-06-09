@@ -1,6 +1,6 @@
 export const dynamic = 'force-dynamic'
 import { streamText } from 'ai'
-import { cerebras } from '@/lib/llm'
+import { groq } from '@/lib/llm'
 import { getCashBalance, getTransactions, getBudget, getAPAging, getARAging, getVendors, getLatestAgentOutput } from '@/lib/db/queries'
 
 const COMPANY_CONTEXT = `
@@ -73,7 +73,7 @@ Current financial data:
 ${JSON.stringify(context, null, 2)}`
 
   const result = streamText({
-    model: cerebras('gpt-oss-120b'),
+    model: groq('llama-3.3-70b-versatile'),
     system: systemPrompt,
     messages,
   })

@@ -33,6 +33,8 @@ export const AGENT_MODELS = {
   'contract-watchdog': { provider: groq,      model: 'llama-3.3-70b-versatile',        providerName: 'Groq' },
   'cfo-briefing':      { provider: sambanova, model: 'DeepSeek-V3.2',                  providerName: 'SambaNova' },
   'chat':              { provider: groq,      model: 'llama-3.3-70b-versatile',        providerName: 'Groq' },
+  // Interactive routes (analyze, consequence, chat) → always Groq for high rate limits
+
 } as const;
 
 // Legacy alias for existing agent files
