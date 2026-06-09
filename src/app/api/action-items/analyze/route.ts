@@ -1,6 +1,6 @@
 export const dynamic = 'force-dynamic'
 import { streamText } from 'ai'
-import { sambanova } from '@/lib/llm'
+import { groq } from '@/lib/llm'
 import { getCashBalance, getBudget, getAPAging, getARAging, getVendors } from '@/lib/db/queries'
 
 export async function POST(req: Request) {
@@ -46,7 +46,7 @@ Financial data context:
 ${JSON.stringify(context, null, 2)}`
 
   const result = streamText({
-    model: sambanova('DeepSeek-V3.2'),
+    model: groq('llama-3.3-70b-versatile'),
     system: systemPrompt,
     messages: [{
       role: 'user',

@@ -1,6 +1,6 @@
 export const dynamic = 'force-dynamic'
 import { streamText } from 'ai'
-import { sambanova } from '@/lib/llm'
+import { groq } from '@/lib/llm'
 import { getARAging, getAPAging, getBudget, getVendors, getCashBalance } from '@/lib/db/queries'
 
 function buildPrompt(
@@ -138,7 +138,7 @@ export async function POST(req: Request) {
     + `\n\nRelevant financial data for context:\n${JSON.stringify(context, null, 2)}`
 
   const result = streamText({
-    model: sambanova('DeepSeek-V3.2'),
+    model: groq('llama-3.3-70b-versatile'),
     system: `You are the CFO of Acme Robotics (Series B, $12.68M cash, 47 employees). Generate a professional, ready-to-use business document. Be specific with names, amounts, and dates from the context. Output ONLY the requested document — no preamble, no explanation, no commentary.`,
     messages: [{ role: 'user', content: userPrompt }],
     maxOutputTokens: 700,
