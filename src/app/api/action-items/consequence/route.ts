@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic'
 import { streamText } from 'ai'
 import { sambanova } from '@/lib/llm'
 import { getARAging, getAPAging, getBudget, getVendors, getCashBalance } from '@/lib/db/queries'

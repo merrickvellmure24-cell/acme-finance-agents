@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 import { runApVendor } from '@/lib/agents/ap-vendor'
 import parseAgentOutput from '@/lib/utils/parseAgentOutput'

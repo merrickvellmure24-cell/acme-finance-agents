@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 import { runContractWatchdog } from '@/lib/agents/contract-watchdog'
 import parseAgentOutput from '@/lib/utils/parseAgentOutput'

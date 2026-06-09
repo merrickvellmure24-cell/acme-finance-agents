@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic'
 import { streamText } from 'ai'
 import { cerebras } from '@/lib/llm'
 import { getCashBalance, getTransactions, getBudget, getAPAging, getARAging, getVendors, getLatestAgentOutput } from '@/lib/db/queries'

@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 import { runCfoBriefing } from '@/lib/agents/cfo-briefing'
 import { runCashReporter } from '@/lib/agents/cash-reporter'

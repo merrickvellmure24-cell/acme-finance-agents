@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 import { runCashForecast } from '@/lib/agents/cash-forecast'
 import parseAgentOutput from '@/lib/utils/parseAgentOutput'
