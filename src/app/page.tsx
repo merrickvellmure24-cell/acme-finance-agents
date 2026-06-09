@@ -1,14 +1,20 @@
 'use client'
 import { useState, useEffect, useCallback } from 'react'
-import { SidebarProvider, SidebarInset, SidebarTrigger } from '@/components/ui/sidebar'
-import { Separator } from '@/components/ui/separator'
-import { AppSidebar } from '@/components/AppSidebar'
+import TopNav, { type PlatformMode } from '@/components/TopNav'
 import KPIBar from '@/components/KPIBar'
 import AgentPanel, { type AgentState } from '@/components/AgentPanel'
 import CFOBriefing from '@/components/CFOBriefing'
 import TransactionExplorer from '@/components/TransactionExplorer'
 import ActionItemsPanel from '@/components/ActionItemsPanel'
-import parseAgentOutput from '@/lib/utils/parseAgentOutput'
+import ActionItemsSidebar from '@/components/ActionItemsSidebar'
+import ActionItemDetail from '@/components/ActionItemDetail'
+import HypotheticalPanel, { DEFAULT_HYPOTHETICAL_INPUTS } from '@/components/HypotheticalPanel'
+import {
+  computeSimDelta,
+  aggregateSimDeltas,
+  type HypotheticalInputs,
+  type AggregateSimDelta,
+} from '@/lib/hypotheticals/scenarios'
 
 type AgentKey = 'briefing' | 'cash-reporter' | 'cash-forecast' | 'budget-analyst' | 'ar-collections' | 'ap-vendor' | 'contract-watchdog'
 type Tab = AgentKey | 'transactions' | 'actions'
@@ -17,7 +23,7 @@ interface ActionItem { id: number; created_at: string; source_agent: string; des
 
 const AGENT_CONFIG: Record<AgentKey, { label: string; model: string; provider: string; emoji: string }> = {
   'briefing':          { label: 'CFO Briefing',  model: 'DeepSeek-V3.2',          provider: 'SambaNova', emoji: '🏦' },
-  'cash-reporter':     { label: 'Cash Position',  model: 'gpt-oss-120b',            provider: 'Cerebras',  emoji: '💵' },
+  'cash-reporter':     { label: 'Treasury',       model: 'gpt-oss-120b',            provider: 'Cerebras',  emoji: '🏛️' },
   'cash-forecast':     { label: 'Cash Forecast',  model: 'llama-3.3-70b-versatile', provider: 'Groq',      emoji: '📈' },
   'budget-analyst':    { label: 'Budget',          model: 'llama-3.3-70b-versatile', provider: 'Groq',      emoji: '📊' },
   'ar-collections':    { label: 'Collections',    model: 'llama-3.3-70b-versatile', provider: 'Groq',      emoji: '📥' },
@@ -38,15 +44,21 @@ export default function Home() {
   )
   const [isRunning, setIsRunning] = useState(false)
   const [actionItems, setActionItems] = useState<ActionItem[]>([])
+  const [platformMode, setPlatformMode] = useState<PlatformMode>('live')
+  const [hypoInputs, setHypoInputs] = useState<HypotheticalInputs>(DEFAULT_HYPOTHETICAL_INPUTS)
+  const [simApprovedItems, setSimApprovedItems] = useState<ActionItem[]>([])
+  const [selectedItem, setSelectedItem] = useState<ActionItem | null>(null)
+  const [initialDecision, setInitialDecision] = useState<'approved' | 'delegated' | 'dismissed' | undefined>()
+  const [scenariosOpen, setScenariosOpen] = useState(false)
+
+  const isHypothetical = platformMode === 'hypothetical'
 
   const reloadActions = useCallback(() => {
     fetch('/api/action-items').then(r => r.json()).then(setActionItems).catch(() => {})
   }, [])
 
-  // Load on mount
   useEffect(() => {
     reloadActions()
-    // Load latest agent outputs
     AGENT_KEYS.forEach(key => {
       const route = key === 'briefing' ? 'cfo-briefing' : key
       fetch(`/api/agents/${route}`).then(r => r.json()).then(row => {
@@ -71,17 +83,14 @@ export default function Home() {
       AGENT_KEYS.forEach(k => { next[k] = { ...emptyState(), status: 'running' } })
       return next
     })
-
     try {
       const res = await fetch('/api/agents/run-all', { method: 'POST' })
       const data = await res.json()
-
       const keyMap: Record<string, AgentKey> = {
         cashReporter: 'cash-reporter', cashForecast: 'cash-forecast',
         budgetAnalyst: 'budget-analyst', arCollections: 'ar-collections',
         apVendor: 'ap-vendor', contractWatchdog: 'contract-watchdog', cfoBriefing: 'briefing',
       }
-
       setAgents(prev => {
         const next = { ...prev }
         for (const [dataKey, agentKey] of Object.entries(keyMap)) {
@@ -129,44 +138,87 @@ export default function Home() {
     reloadActions()
   }
 
-  const openActionCount = actionItems.filter(i => i.status !== 'done').length
-  const PAGE_TITLE: Record<Tab, string> = {
-    briefing: 'CFO Briefing', 'cash-reporter': 'Cash Position', 'cash-forecast': 'Cash Forecast',
-    'budget-analyst': 'Budget', 'ar-collections': 'Collections', 'ap-vendor': 'Payables',
-    'contract-watchdog': 'Contracts', transactions: 'Transactions', actions: 'Action Items',
+  function handleSelectActionItem(item: ActionItem, decision?: 'approved' | 'delegated') {
+    setSelectedItem(item)
+    setInitialDecision(decision)
   }
 
+  function handleCloseDrawer() {
+    setSelectedItem(null)
+    setInitialDecision(undefined)
+  }
+
+  function handleSimApprove(item: ActionItem) {
+    setSimApprovedItems(prev =>
+      prev.some(i => i.id === item.id) ? prev : [...prev, item]
+    )
+  }
+
+  function handleResetSim() {
+    setSimApprovedItems([])
+  }
+
+  // When switching away from hypothetical mode, clear sim approvals and close panel
+  function handlePlatformModeChange(mode: PlatformMode) {
+    if (mode === 'live') { setSimApprovedItems([]); setScenariosOpen(false) }
+    setPlatformMode(mode)
+  }
+
+  const simDeltas: AggregateSimDelta | null = isHypothetical && simApprovedItems.length > 0
+    ? aggregateSimDeltas(simApprovedItems.map(computeSimDelta))
+    : null
+
+  const showSidebar = activeTab !== 'actions' && activeTab !== 'transactions'
+
   return (
-    <SidebarProvider>
-      <AppSidebar
-        activeTab={activeTab as AgentKey}
+    <div className="flex flex-col h-screen overflow-hidden bg-background">
+      <TopNav
+        activeTab={activeTab}
         onTabChange={tab => setActiveTab(tab as Tab)}
-        agentStates={Object.fromEntries(AGENT_KEYS.map(k => [k, agents[k]]))}
-        openActionCount={openActionCount}
+        platformMode={platformMode}
+        onPlatformModeChange={handlePlatformModeChange}
         isRunning={isRunning}
-        onRunAll={handleRunAll}
+        onUpdate={handleRunAll}
+        agentStates={Object.fromEntries(AGENT_KEYS.map(k => [k, agents[k]]))}
+        onOpenScenarios={() => setScenariosOpen(o => !o)}
+        scenariosOpen={scenariosOpen}
       />
-      <SidebarInset className="flex flex-col h-screen overflow-hidden">
-        {/* Top bar */}
-        <header className="flex items-center gap-2 border-b border-border px-4 py-3 flex-shrink-0">
-          <SidebarTrigger className="-ml-1" />
-          <Separator orientation="vertical" className="h-4 mx-1" />
-          <h2 className="text-sm font-medium text-foreground">{PAGE_TITLE[activeTab]}</h2>
-        </header>
 
-        {/* KPI Bar */}
-        <KPIBar runStatus={isRunning ? 'running' : 'idle'} />
+      {isHypothetical && (
+        <div className="px-4 py-1.5 bg-yellow-500/10 border-b border-yellow-500/30 text-xs text-yellow-300 text-center flex-shrink-0">
+          ⚗ Scenario mode — changes are simulated only
+          {simApprovedItems.length > 0 && (
+            <span className="ml-2 font-semibold">· {simApprovedItems.length} item{simApprovedItems.length > 1 ? 's' : ''} sim-approved</span>
+          )}
+          <span className="ml-2 text-yellow-400/50">· Click ⚙ Scenarios in the nav to adjust assumptions</span>
+        </div>
+      )}
 
-        {/* Main content */}
-        <main className="flex-1 overflow-y-auto">
+      {/* Floating scenario panel — fixed overlay, no layout impact */}
+      {isHypothetical && scenariosOpen && (
+        <>
+          <div
+            className="fixed inset-0 z-40"
+            onClick={() => setScenariosOpen(false)}
+          />
+          <div className="fixed top-[52px] right-4 z-50 w-[480px] max-w-[calc(100vw-2rem)] shadow-2xl rounded-xl border border-yellow-500/40 overflow-hidden">
+            <HypotheticalPanel inputs={hypoInputs} onChange={setHypoInputs} onClose={() => setScenariosOpen(false)} />
+          </div>
+        </>
+      )}
+
+      <KPIBar runStatus={isRunning ? 'running' : 'idle'} simDeltas={simDeltas} />
+
+      <div className="flex flex-1 min-h-0">
+        <main className="flex-1 overflow-y-auto min-w-0">
           {activeTab === 'briefing' && (
             <CFOBriefing
               state={agents['briefing']}
               agentStates={Object.fromEntries(AGENT_KEYS.filter(k => k !== 'briefing').map(k => [k, agents[k]]))}
               onJumpToTab={tab => setActiveTab(tab as Tab)}
-              actionItems={actionItems}
-              onReloadActions={reloadActions}
               onRerun={() => handleRerun('briefing')}
+              hypoInputs={isHypothetical ? hypoInputs : undefined}
+              simDeltas={simDeltas}
             />
           )}
           {(AGENT_KEYS.filter(k => k !== 'briefing') as AgentKey[]).map(key => activeTab === key && (
@@ -178,12 +230,34 @@ export default function Home() {
               provider={AGENT_CONFIG[key].provider}
               state={agents[key]}
               onRerun={() => handleRerun(key)}
+              hypoInputs={isHypothetical ? hypoInputs : undefined}
             />
           ))}
           {activeTab === 'transactions' && <TransactionExplorer />}
           {activeTab === 'actions' && <ActionItemsPanel items={actionItems} onUpdate={reloadActions} />}
         </main>
-      </SidebarInset>
-    </SidebarProvider>
+
+        {showSidebar && (
+          <ActionItemsSidebar
+            items={actionItems}
+            onSelectItem={handleSelectActionItem}
+            onViewAll={() => setActiveTab('actions')}
+            isHypothetical={isHypothetical}
+            simApprovedItems={simApprovedItems}
+            simDeltas={simDeltas}
+            onResetSim={handleResetSim}
+          />
+        )}
+      </div>
+
+      <ActionItemDetail
+        item={selectedItem}
+        initialDecision={initialDecision}
+        simulationMode={isHypothetical}
+        onClose={handleCloseDrawer}
+        onUpdate={reloadActions}
+        onSimApprove={handleSimApprove}
+      />
+    </div>
   )
 }

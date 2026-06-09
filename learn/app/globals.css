@@ -1,0 +1,86 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, monospace;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-destructive: var(--destructive);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-green: var(--green);
+  --color-yellow: var(--yellow);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent: var(--sidebar-accent);
+}
+
+:root {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --border: oklch(1 0 0 / 10%);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --green: oklch(0.723 0.191 142.5);
+  --yellow: oklch(0.852 0.199 91.936);
+  --sidebar: oklch(0.18 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-accent: oklch(0.269 0 0);
+}
+
+@layer base {
+  * { @apply border-border; }
+  body { @apply bg-background text-foreground font-sans antialiased; }
+}
+
+.prose-lesson h2 {
+  @apply text-lg font-semibold mt-8 mb-3 text-foreground;
+}
+.prose-lesson h3 {
+  @apply text-sm font-semibold mt-6 mb-2 text-foreground;
+}
+.prose-lesson p {
+  @apply text-sm text-muted-foreground leading-relaxed mb-4;
+}
+.prose-lesson ul, .prose-lesson ol {
+  @apply text-sm text-muted-foreground mb-4 ml-5 space-y-1;
+}
+.prose-lesson ul { @apply list-disc; }
+.prose-lesson ol { @apply list-decimal; }
+.prose-lesson strong {
+  @apply text-foreground font-medium;
+}
+.prose-lesson a {
+  @apply text-foreground underline underline-offset-2 hover:text-primary;
+}
+.prose-lesson blockquote {
+  @apply border-l-2 border-border pl-4 my-4 text-muted-foreground italic;
+}
+.prose-lesson code {
+  @apply font-mono text-xs bg-muted px-1.5 py-0.5 rounded;
+}
+.prose-lesson table {
+  @apply w-full text-sm mb-4 border-collapse;
+}
+.prose-lesson th, .prose-lesson td {
+  @apply border border-border px-3 py-2 text-left;
+}
+.prose-lesson th {
+  @apply bg-muted text-foreground font-medium;
+}

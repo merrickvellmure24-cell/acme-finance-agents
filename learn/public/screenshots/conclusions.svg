@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 120" fill="none">
+  <rect width="400" height="120" rx="8" fill="#27272a" stroke="#3f3f46"/>
+  <rect x="12" y="12" width="376" height="28" rx="4" fill="#18181b" stroke="#ef4444"/>
+  <text x="20" y="30" fill="#ef4444" font-size="9" font-weight="bold">RED</text>
+  <text x="52" y="30" fill="#fafafa" font-size="9">Burn 34% above guidance  investigate immediately</text>
+  <rect x="12" y="46" width="376" height="28" rx="4" fill="#18181b" stroke="#facc15"/>
+  <text x="20" y="64" fill="#facc15" font-size="9" font-weight="bold">YELLOW</text>
+  <text x="68" y="64" fill="#fafafa" font-size="9">Reserve account untouched  confirm intentional</text>
+  <rect x="12" y="80" width="376" height="28" rx="4" fill="#18181b" stroke="#22c55e"/>
+  <text x="20" y="98" fill="#22c55e" font-size="9" font-weight="bold">GREEN</text>
+  <text x="68" y="98" fill="#fafafa" font-size="9">Operating cash trend stable over 4 weeks</text>
+</svg>

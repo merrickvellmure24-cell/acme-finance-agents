@@ -6,12 +6,13 @@ import ReasoningChain from './ReasoningChain'
 import ConclusionCards from './ConclusionCards'
 import AgentReport from './AgentReport'
 import AgentChat from './AgentChat'
-import CashPositionCharts from './charts/CashPositionCharts'
+import TreasuryCharts from './charts/TreasuryCharts'
 import ForecastCharts from './charts/ForecastCharts'
 import BudgetCharts from './charts/BudgetCharts'
 import CollectionsCharts from './charts/CollectionsCharts'
 import PayablesCharts from './charts/PayablesCharts'
 import ContractsTable from './charts/ContractsTable'
+import type { HypotheticalInputs } from '@/lib/hypotheticals/scenarios'
 
 export interface AgentState {
   status: 'idle' | 'running' | 'complete' | 'error'
@@ -31,10 +32,11 @@ interface Props {
   provider: string
   state: AgentState
   onRerun: () => void
+  hypoInputs?: HypotheticalInputs
 }
 
 const DESCRIPTIONS: Record<string, string> = {
-  'cash-reporter': 'Monitors current cash position, weekly burn trend, and runway — updated on every run.',
+  'cash-reporter': 'Treasury liquidity — operating vs reserve cash, weekly burn trend, and runway.',
   'cash-forecast': 'Projects cash 9 months forward across 3 scenarios: current burn, burn discipline, and revenue acceleration.',
   'budget-analyst': 'Compares actual spend against budget for all 8 departments, explains variances, and projects year-end.',
   'ar-collections': 'Tracks all 15 customer invoices, calculates DSO, and prioritizes who to call first.',
@@ -43,19 +45,27 @@ const DESCRIPTIONS: Record<string, string> = {
   'cfo-briefing': 'Synthesizes all 6 agent reports into a prioritized executive briefing with action items.',
 }
 
-function AgentCharts({ agentKey }: { agentKey: string }) {
+function AgentCharts({ agentKey, hypoInputs }: { agentKey: string; hypoInputs?: HypotheticalInputs }) {
+  const arDelayDays = hypoInputs?.arDelayDays ?? 0
   switch (agentKey) {
-    case 'cash-reporter':     return <CashPositionCharts />
-    case 'cash-forecast':     return <ForecastCharts />
-    case 'budget-analyst':    return <BudgetCharts />
-    case 'ar-collections':    return <CollectionsCharts />
-    case 'ap-vendor':         return <PayablesCharts />
-    case 'contract-watchdog': return <ContractsTable />
-    default: return null
+    case 'cash-reporter':
+      return <TreasuryCharts arDelayDays={arDelayDays} />
+    case 'cash-forecast':
+      return <ForecastCharts />
+    case 'budget-analyst':
+      return <BudgetCharts />
+    case 'ar-collections':
+      return <CollectionsCharts />
+    case 'ap-vendor':
+      return <PayablesCharts />
+    case 'contract-watchdog':
+      return <ContractsTable />
+    default:
+      return null
   }
 }
 
-export default function AgentPanel({ agentKey, agentName, model, provider, state, onRerun }: Props) {
+export default function AgentPanel({ agentKey, agentName, model, provider, state, onRerun, hypoInputs }: Props) {
   const [auditOpen, setAuditOpen] = useState(false)
 
   if (state.status === 'idle') {
@@ -67,9 +77,9 @@ export default function AgentPanel({ agentKey, agentName, model, provider, state
             <p className="text-xs text-muted-foreground leading-relaxed">{DESCRIPTIONS[agentKey]}</p>
           </div>
         )}
-        <AgentCharts agentKey={agentKey} />
+        <AgentCharts agentKey={agentKey} hypoInputs={hypoInputs} />
         <div className="flex flex-col items-center justify-center text-center px-8 py-8">
-          <p className="text-muted-foreground/30 text-sm">Click <span className="text-primary">▶ Run All Agents</span> to get AI analysis of this data.</p>
+          <p className="text-muted-foreground/30 text-sm">Click <span className="text-primary">↻ Update</span> in the top bar to get AI analysis of this data.</p>
         </div>
         <div data-agent-chat={agentKey}><AgentChat agent={agentKey} /></div>
       </div>
@@ -80,7 +90,7 @@ export default function AgentPanel({ agentKey, agentName, model, provider, state
     return (
       <div className="flex flex-col">
         <AgentStatusBar agentKey={agentKey} agentName={agentName} model={model} provider={provider} lastRun={state.lastRun} status="running" />
-        <AgentCharts agentKey={agentKey} />
+        <AgentCharts agentKey={agentKey} hypoInputs={hypoInputs} />
         <div className="p-6 space-y-4">
           <p className="text-sm text-muted-foreground">Analyzing financial data...</p>
           <ReasoningChain steps={state.reasoningSteps} isStreaming={true} />
@@ -98,13 +108,9 @@ export default function AgentPanel({ agentKey, agentName, model, provider, state
         </div>
       )}
 
-      {/* Live data visualizations — always rendered */}
-      <AgentCharts agentKey={agentKey} />
-
-      {/* AI findings */}
+      <AgentCharts agentKey={agentKey} hypoInputs={hypoInputs} />
       <ConclusionCards conclusions={state.conclusions} agentKey={agentKey} />
 
-      {/* Audit Trail — collapsed by default */}
       <div className="border-b border-border">
         <button
           onClick={() => setAuditOpen(o => !o)}

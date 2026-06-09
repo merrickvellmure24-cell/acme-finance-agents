@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200" fill="none">
+  <rect width="400" height="200" rx="8" fill="#27272a" stroke="#3f3f46"/>
+  <text x="12" y="20" fill="#fafafa" font-size="11" font-weight="bold">Budget</text>
+  <rect x="12" y="28" width="376" height="70" rx="4" fill="#18181b" stroke="#3f3f46"/>
+  <rect x="30" y="50" width="12" height="40" fill="#52525b"/><rect x="44" y="55" width="12" height="35" fill="#ef4444"/>
+  <rect x="80" y="45" width="12" height="45" fill="#52525b"/><rect x="94" y="50" width="12" height="40" fill="#71717a"/>
+  <text x="20" y="42" fill="#a1a1aa" font-size="7" font-family="monospace">PLANNED vs ACTUAL BARS</text>
+  <rect x="12" y="106" width="376" height="55" rx="4" fill="#18181b" stroke="#3f3f46"/>
+  <text x="20" y="122" fill="#a1a1aa" font-size="7" font-family="monospace">VARIANCE TABLE</text>
+  <text x="20" y="138" fill="#fafafa" font-size="8">Marketing  +$77K  +42%</text>
+  <text x="20" y="152" fill="#fafafa" font-size="8">Engineering  -$12K  -3%</text>
+  <rect x="12" y="167" width="376" height="24" rx="4" fill="#18181b" stroke="#ef4444"/>
+  <text x="20" y="183" fill="#ef4444" font-size="8">RED: Conference overages MODEX + ProMat</text>
+</svg>

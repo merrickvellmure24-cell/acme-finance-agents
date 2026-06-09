@@ -20,6 +20,17 @@ const AGENT_DESCRIPTIONS: Record<string, string> = {
   'cfo-briefing':      'Synthesizes all agent findings into prioritized executive actions',
 }
 
+// Which database tables each agent reads — shown as data provenance
+const AGENT_DATA_SOURCES: Record<string, { table: string; rows: string }[]> = {
+  'cash-reporter':     [{ table: 'cash_balance', rows: '8 weeks' }],
+  'cash-forecast':     [{ table: 'cash_balance', rows: '8 weeks' }],
+  'budget-analyst':    [{ table: 'budget', rows: '48 rows' }, { table: 'transactions', rows: '69 txns' }],
+  'ar-collections':    [{ table: 'ar_aging', rows: '15 invoices' }],
+  'ap-vendor':         [{ table: 'ap_aging', rows: '20 invoices' }, { table: 'vendors', rows: '26 vendors' }],
+  'contract-watchdog': [{ table: 'vendors', rows: '26 vendors' }],
+  'cfo-briefing':      [{ table: 'agent_outputs', rows: '6 agents' }],
+}
+
 interface Props {
   agentKey: string; agentName: string; model: string; provider: string
   lastRun: Date | null; status: 'idle' | 'running' | 'complete' | 'error'; onRerun?: () => void
@@ -47,7 +58,14 @@ export default function AgentStatusBar({ agentKey, agentName, model, provider, l
           {lastRun && <span className="text-xs text-muted-foreground">{timeAgo(lastRun)}</span>}
           {status === 'running' && <span className="text-xs text-yellow-400 animate-pulse">Analyzing...</span>}
         </div>
-        <p className="text-xs text-muted-foreground mt-0.5">{AGENT_DESCRIPTIONS[agentKey] ?? ''}</p>
+        <div className="flex items-center gap-3 flex-wrap mt-0.5">
+          <p className="text-xs text-muted-foreground">{AGENT_DESCRIPTIONS[agentKey] ?? ''}</p>
+          {AGENT_DATA_SOURCES[agentKey]?.map(src => (
+            <span key={src.table} className="text-[10px] font-mono text-muted-foreground/40 bg-muted/30 px-1.5 py-0.5 rounded">
+              {src.table} · {src.rows}
+            </span>
+          ))}
+        </div>
       </div>
       {(status === 'complete' || status === 'error') && onRerun && (
         <Button variant="outline" size="sm" onClick={onRerun} className="flex-shrink-0 h-7 text-xs">Re-run</Button>

@@ -11,11 +11,11 @@ function fmt(n: number) {
 const AGENTS = [
   {
     icon: '🏦', name: 'CFO Briefing', tag: 'Start here',
-    desc: 'Synthesizes all 6 specialist agents into one executive briefing. Prioritizes the most critical issues by financial impact — your 30-second situational awareness overview.',
+    desc: 'Your first-hour morning briefing — synthesizes all specialist agents into executive pulse, charts, and priority issues.',
   },
   {
-    icon: '💵', name: 'Cash Position', tag: 'Cash & burn',
-    desc: 'Shows how much cash the company holds, how fast it\'s being spent week over week, and how that compares to the approved burn target ($850K–$1M/mo guidance).',
+    icon: '🏛️', name: 'Treasury', tag: 'Cash & liquidity',
+    desc: 'Operating vs reserve cash, weekly burn trend, runway, and inflow/outflow waterfall — your liquidity command center.',
   },
   {
     icon: '📈', name: 'Cash Forecast', tag: '9-month outlook',
@@ -58,15 +58,15 @@ const TERMS = [
 ]
 
 const NAV_SECTIONS = [
-  { icon: '🏦', label: 'CFO Briefing', desc: 'The executive summary — always start here after running agents. Shows RED/YELLOW/GREEN findings across all domains.' },
-  { icon: '💵', label: 'Cash Position', desc: 'Live 8-week cash balance chart, weekly burn trend bars, and runway calculation. Best for monitoring day-to-day cash health.' },
+  { icon: '🏦', label: 'Morning Briefing', desc: 'The first-hour executive view — charts, Executive Pulse, and domain health at a glance. Action items live in the right sidebar.' },
+  { icon: '🏛️', label: 'Treasury', desc: 'Operating vs reserve liquidity, 8-week cash chart, burn vs guidance, and AR/AP waterfall.' },
   { icon: '📈', label: 'Cash Forecast', desc: '9-month forward projection across 3 scenarios. Answers: "When does cash become a problem if nothing changes?"' },
   { icon: '📊', label: 'Budget', desc: 'Grouped bar chart of planned vs. actual by department, plus a variance table showing which departments are over or under budget.' },
   { icon: '📥', label: 'Collections', desc: 'AR aging chart by bucket (current / 30 / 60 / 90 days), overdue invoice table, and Send Reminder action buttons.' },
   { icon: '📤', label: 'Payables', desc: 'AP invoice table sorted by overdue days. Includes AI fraud audit findings and Schedule Pay / Flag Dispute buttons.' },
-  { icon: '📋', label: 'Contracts', desc: 'Vendor contract risk table sorted by exposure. Flags month-to-month agreements, missing contracts, and renewal timing.' },
+  { icon: '📋', label: 'Contracts', desc: 'Vendor contract risk table sorted by exposure. Under Data in the icon rail.' },
   { icon: '🔍', label: 'Transactions', desc: 'Full searchable transaction log. Filter by vendor, department, category, or date range. Export to CSV.' },
-  { icon: '✅', label: 'Action Items', desc: 'Tracks all flagged issues and CFO decisions (Approve / Delegate / Dismiss). Shows open, in-progress, and resolved items.' },
+  { icon: '✅', label: 'Action Items', desc: 'Persistent task sidebar on the dashboard. Approve opens AI brief + resolution email draft.' },
 ]
 
 export default function WelcomePage() {
@@ -111,9 +111,9 @@ export default function WelcomePage() {
 
           <h1 className="text-4xl font-bold tracking-tight mb-4">Finance Command Center</h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed">
-            A real-time financial intelligence platform for Acme Robotics. Seven AI agents continuously
-            monitor cash, budget, collections, payables, and vendor contracts — surfacing issues before
-            they become crises, and giving the CFO one-click action on every finding.
+            A prototype for the first hour of a CFO&apos;s morning at Acme Robotics. Seven AI agents monitor
+            treasury, budget, collections, payables, and contracts — surfacing issues and decisions
+            before they become crises.
           </p>
 
           {/* Live stat strip */}
@@ -193,8 +193,8 @@ export default function WelcomePage() {
           <div className="grid md:grid-cols-3 gap-5">
             {[
               {
-                n: '01', title: 'Run the Agents',
-                desc: 'Click "Run All Agents" in the bottom-left of the sidebar. All 7 AI agents analyze the current data simultaneously — takes about 30–60 seconds.',
+                n: '01', title: 'Update',
+                desc: 'Click "↻ Update" in the top bar. All 7 AI agents analyze the current data simultaneously — takes about 30–60 seconds.',
                 note: 'Each agent uses a different AI model (Groq, Cerebras, SambaNova) chosen for speed and the type of analysis required.',
               },
               {
@@ -338,7 +338,7 @@ export default function WelcomePage() {
             ))}
           </div>
           <p className="text-xs text-muted-foreground/50 mt-3 px-1">
-            The <strong className="text-muted-foreground">▶ Run All Agents</strong> button lives at the bottom of the left sidebar. Click it first to populate the analysis.
+            The <strong className="text-muted-foreground">↻ Update</strong> button lives in the top bar. Click it first to populate the analysis. Action items appear in the right sidebar.
           </p>
         </section>
 
@@ -368,9 +368,9 @@ export default function WelcomePage() {
         <section className="py-16 border-t border-border text-center">
           <h2 className="text-2xl font-semibold mb-3">Ready to explore?</h2>
           <p className="text-muted-foreground mb-6 max-w-md mx-auto text-sm leading-relaxed">
-            Click <strong className="text-foreground">Run All Agents</strong> first (bottom-left sidebar) to generate fresh analysis.
-            Then open <strong className="text-foreground">CFO Briefing</strong> for the executive summary.
-            Each agent tab has live charts and an AI chat you can ask questions in plain English.
+            Click <strong className="text-foreground">↻ Update</strong> first (top bar) to generate fresh analysis.
+            Then review the <strong className="text-foreground">Morning Briefing</strong> with charts and Executive Pulse.
+            Action items live in the right sidebar — approve opens an AI brief and resolution email draft.
           </p>
           <Link href="/" className="inline-flex items-center gap-2 px-8 py-3.5 bg-primary text-primary-foreground font-medium rounded-lg hover:bg-primary/90 transition text-base">
             Enter Dashboard →

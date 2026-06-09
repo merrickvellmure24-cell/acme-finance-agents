@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "test": "vitest run",
     "ingest": "ts-node --project tsconfig.scripts.json scripts/ingest.ts"
   },
   "dependencies": {
@@ -42,6 +43,7 @@
     "eslint-config-next": "16.2.7",
     "tailwindcss": "^4",
     "ts-node": "^10.9.2",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.1.8"
   }
 }

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200" fill="none">
+  <rect width="400" height="200" rx="8" fill="#27272a" stroke="#3f3f46"/>
+  <text x="12" y="20" fill="#fafafa" font-size="11" font-weight="bold">Action Items</text>
+  <rect x="12" y="28" width="88" height="140" rx="4" fill="#18181b" stroke="#ef4444"/>
+  <text x="20" y="44" fill="#ef4444" font-size="8" font-family="monospace">OPEN</text>
+  <rect x="18" y="50" width="76" height="28" rx="2" fill="#3f3f46"/>
+  <rect x="18" y="84" width="76" height="28" rx="2" fill="#3f3f46"/>
+  <rect x="108" y="28" width="88" height="140" rx="4" fill="#18181b" stroke="#facc15"/>
+  <text x="116" y="44" fill="#facc15" font-size="8" font-family="monospace">IN PROGRESS</text>
+  <rect x="204" y="28" width="88" height="140" rx="4" fill="#18181b" stroke="#22c55e"/>
+  <text x="212" y="44" fill="#22c55e" font-size="8" font-family="monospace">RESOLVED</text>
+  <rect x="300" y="28" width="88" height="140" rx="4" fill="#18181b" stroke="#3f3f46"/>
+  <text x="308" y="44" fill="#71717a" font-size="8" font-family="monospace">DISMISSED</text>
+  <text x="12" y="182" fill="#71717a" font-size="8">Click card � Approve / Delegate / Dismiss + Consequence Preview</text>
+</svg>

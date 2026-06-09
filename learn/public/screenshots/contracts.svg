@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200" fill="none">
+  <rect width="400" height="200" rx="8" fill="#27272a" stroke="#3f3f46"/>
+  <text x="12" y="20" fill="#fafafa" font-size="11" font-weight="bold">Contracts</text>
+  <rect x="12" y="28" width="376" height="140" rx="4" fill="#18181b" stroke="#3f3f46"/>
+  <text x="20" y="44" fill="#a1a1aa" font-size="7" font-family="monospace">VENDOR RISK TABLE</text>
+  <text x="20" y="62" fill="#ef4444" font-size="8">SaaS Vendor A  M2M  $25K/mo  � No contract</text>
+  <text x="20" y="78" fill="#facc15" font-size="8">Cloud Provider  Annual  $18K/mo  Renews Q3</text>
+  <text x="20" y="94" fill="#fafafa" font-size="8">Legal Firm  Annual  $5K/mo  OK</text>
+  <text x="20" y="110" fill="#fafafa" font-size="8">Staffing Co  M2M  $12K/mo  �</text>
+  <rect x="12" y="176" width="376" height="18" rx="4" fill="#18181b" stroke="#facc15"/>
+  <text x="20" y="189" fill="#facc15" font-size="8">YELLOW: 3 vendors need contract review</text>
+</svg>

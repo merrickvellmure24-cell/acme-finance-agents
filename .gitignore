@@ -16,6 +16,9 @@
 # next.js
 /.next/
 /out/
+learn/node_modules
+learn/.next/
+learn/out/
 
 # production
 /build

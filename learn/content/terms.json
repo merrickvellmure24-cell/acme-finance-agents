@@ -1,0 +1,242 @@
+[
+  {
+    "term": "Burn Rate",
+    "category": "Cash",
+    "definition": "How much cash the company spends per month (or week). At Acme, approved guidance is $850K–$1.0M/month (~$196K–$231K/week). Current actual burn is ~$1.34M/month — 34–58% above target.",
+    "implication": "Burn above guidance shortens runway and signals spending discipline problems. A CFO would investigate which departments or one-time events (conferences, hiring) drove the overage.",
+    "lesson": "2-cash-burn-runway",
+    "screens": ["kpi-bar", "cash-position"]
+  },
+  {
+    "term": "Runway",
+    "category": "Cash",
+    "definition": "Months until cash runs out at the current burn rate. Formula: Total Cash ÷ Monthly Burn. Acme target: 18+ months. Current: ~9.5 months at ~$1.34M/mo burn on $12.68M cash.",
+    "implication": "Below 12 months triggers board conversations about fundraising, cost cuts, or revenue acceleration. Runway is the single number investors ask first.",
+    "lesson": "2-cash-burn-runway",
+    "screens": ["kpi-bar", "cash-position", "cash-forecast"]
+  },
+  {
+    "term": "Operating Cash",
+    "category": "Cash",
+    "definition": "Cash in the day-to-day operating account used for payroll, vendors, and expenses. At Acme: $11.18M of the $12.68M total.",
+    "implication": "Operating cash is what you actually spend from. Reserve cash is intentionally locked away — don't confuse total cash with spendable cash.",
+    "lesson": "2-cash-burn-runway",
+    "screens": ["cash-position"]
+  },
+  {
+    "term": "Reserve Cash",
+    "category": "Cash",
+    "definition": "Cash set aside in a separate account, not for daily operations. At Acme: $1.5M reserve.",
+    "implication": "Reserves provide a buffer for emergencies or covenant compliance. Drawing on reserve is a deliberate CFO decision, not routine spending.",
+    "lesson": "2-cash-burn-runway",
+    "screens": ["cash-position"]
+  },
+  {
+    "term": "Weekly Burn",
+    "category": "Cash",
+    "definition": "Cash spent in a single week. Acme tracks 8 weeks of history. Current: ~$310K/week vs guidance of ~$196K–$231K/week.",
+    "implication": "Weekly view catches spikes faster than monthly — e.g. a $77K conference overage (MODEX + ProMat) shows up immediately in the burn bar chart.",
+    "lesson": "2-cash-burn-runway",
+    "screens": ["cash-position"]
+  },
+  {
+    "term": "AR (Accounts Receivable)",
+    "category": "Receivables",
+    "definition": "Money customers owe Acme for goods or services already delivered. Outstanding invoices until paid.",
+    "implication": "AR is not cash — it's a promise. Overdue AR tightens cash flow because you've already spent to deliver but haven't been paid.",
+    "lesson": "5-ar-collections",
+    "screens": ["kpi-bar", "collections"]
+  },
+  {
+    "term": "AP (Accounts Payable)",
+    "category": "Payables",
+    "definition": "Money Acme owes vendors for goods or services received. Open vendor invoices until paid.",
+    "implication": "Paying AP reduces cash. Paying duplicate or fraudulent AP wastes cash. Holding disputed AP preserves cash but risks vendor relationships.",
+    "lesson": "6-ap-vendors",
+    "screens": ["kpi-bar", "payables"]
+  },
+  {
+    "term": "DSO (Days Sales Outstanding)",
+    "category": "Receivables",
+    "definition": "Average days to collect payment after invoicing. Healthy B2B: 30–45 days. Above 60 days signals collections problems.",
+    "implication": "High DSO means you're effectively lending money to customers. Every day of DSO above terms is working capital trapped.",
+    "lesson": "5-ar-collections",
+    "screens": ["collections"]
+  },
+  {
+    "term": "Aging Bucket",
+    "category": "Receivables",
+    "definition": "Grouping invoices by how overdue they are: Current, 1–30 days, 31–60, 61–90, 90+ days.",
+    "implication": "The older the bucket, the lower the probability of full collection. 90+ day invoices often need escalation, payment plans, or write-offs.",
+    "lesson": "5-ar-collections",
+    "screens": ["collections", "payables"]
+  },
+  {
+    "term": "Budget Variance",
+    "category": "Budget",
+    "definition": "Difference between planned budget and actual spending. Positive variance (over budget) = spent more than approved.",
+    "implication": "Persistent over-variance in one department means either the budget was wrong, spending is out of control, or both. CFOs reforecast when variance exceeds ~10%.",
+    "lesson": "4-budget-variance",
+    "screens": ["budget"]
+  },
+  {
+    "term": "Planned vs Actual",
+    "category": "Budget",
+    "definition": "Comparison of what a department was approved to spend (planned) vs what they actually spent (actual), by month.",
+    "implication": "The core accountability mechanism in FP&A. Explains *where* burn is coming from, not just *how much*.",
+    "lesson": "4-budget-variance",
+    "screens": ["budget"]
+  },
+  {
+    "term": "Cash Forecast Scenario",
+    "category": "Forecast",
+    "definition": "A projected cash path over 9 months. Acme models three: current trajectory, spending discipline, and revenue growth.",
+    "implication": "Scenarios answer 'what if we do nothing vs cut spend vs grow revenue?' — essential for board planning and fundraising timing.",
+    "lesson": "3-forecasting",
+    "screens": ["cash-forecast"]
+  },
+  {
+    "term": "Payment Hold",
+    "category": "Payables",
+    "definition": "A flag on a vendor invoice pausing payment pending review — often for duplicates, missing POs, or disputes.",
+    "implication": "Holds protect cash but create vendor friction. AP team must resolve holds quickly or risk supply chain disruption.",
+    "lesson": "6-ap-vendors",
+    "screens": ["payables"]
+  },
+  {
+    "term": "Fraud Audit",
+    "category": "Payables",
+    "definition": "AI review of AP invoices for duplicate charges, suspicious patterns, and unauthorized payments. Unique to the Payables agent.",
+    "implication": "Catches errors humans miss under volume — e.g. Apex Logistics duplicate invoices ($14.5K). Prevents paying the same bill twice.",
+    "lesson": "6-ap-vendors",
+    "screens": ["payables"]
+  },
+  {
+    "term": "Contract Type",
+    "category": "Vendors",
+    "definition": "How a vendor relationship is structured: annual contract, month-to-month (M2M), or no contract on file.",
+    "implication": "M2M and no-contract vendors have pricing and renewal risk. High-spend vendors without contracts are negotiation priorities.",
+    "lesson": "6-ap-vendors",
+    "screens": ["contracts"]
+  },
+  {
+    "term": "Vendor Risk",
+    "category": "Vendors",
+    "definition": "Exposure from vendor relationships: spend level, contract coverage, renewal timing, and concentration risk.",
+    "implication": "A CFO prioritizes renegotiation where spend is high but protection is low — e.g. month-to-month SaaS at $20K+/mo.",
+    "lesson": "6-ap-vendors",
+    "screens": ["contracts"]
+  },
+  {
+    "term": "RED Conclusion",
+    "category": "Platform",
+    "definition": "Critical finding requiring immediate action. Highest severity in agent output. Auto-creates an action item on Run All.",
+    "implication": "RED items are your Monday morning priority list. Each should have a dollar impact and a clear decision.",
+    "lesson": "7-ai-to-action",
+    "screens": ["cfo-briefing", "action-items"]
+  },
+  {
+    "term": "YELLOW Conclusion",
+    "category": "Platform",
+    "definition": "Warning finding — monitor closely, act within days/weeks. Not yet critical but trending wrong.",
+    "implication": "YELLOW items become RED if ignored. Good for weekly standups and trend tracking.",
+    "lesson": "7-ai-to-action",
+    "screens": ["cfo-briefing"]
+  },
+  {
+    "term": "GREEN Conclusion",
+    "category": "Platform",
+    "definition": "Healthy finding — no action needed. Confirms something is on track.",
+    "implication": "GREEN conclusions build trust in the system. Not everything is a fire — the platform also confirms what's working.",
+    "lesson": "7-ai-to-action",
+    "screens": ["cfo-briefing"]
+  },
+  {
+    "term": "Action Item",
+    "category": "Platform",
+    "definition": "A tracked task auto-created from RED agent conclusions. Has owner, due date, amount, and status (open/in-progress/resolved).",
+    "implication": "Bridges AI insight to human decision. CFO approves, delegates, or dismisses — with consequence preview before committing.",
+    "lesson": "7-ai-to-action",
+    "screens": ["action-items", "cfo-briefing"]
+  },
+  {
+    "term": "Agent",
+    "category": "Platform",
+    "definition": "An AI specialist that reads specific financial data, reasons about it, and outputs structured conclusions. Acme has 7 agents.",
+    "implication": "Think of agents as overnight analysts — each owns a domain (cash, budget, AR, etc.) and reports findings in a standard format.",
+    "lesson": "7-ai-to-action",
+    "screens": ["cfo-briefing"]
+  },
+  {
+    "term": "Run All",
+    "category": "Platform",
+    "definition": "Executes all 6 specialist agents in parallel, then the CFO Briefing agent sequentially, then creates action items from RED conclusions.",
+    "implication": "The primary refresh button. Run after data updates or at the start of each week for a fresh executive picture.",
+    "lesson": "7-ai-to-action",
+    "screens": ["cfo-briefing"]
+  },
+  {
+    "term": "Data Scanned",
+    "category": "Platform",
+    "definition": "Audit section listing exactly which database tables and rows the agent read. Collapsed by default in the UI.",
+    "implication": "Transparency — you can verify the agent looked at real data, not hallucinated numbers. Critical for trust in finance AI.",
+    "lesson": "7-ai-to-action",
+    "screens": ["cfo-briefing"]
+  },
+  {
+    "term": "Reasoning Chain",
+    "category": "Platform",
+    "definition": "Step-by-step logic the agent used to reach conclusions. Shows the 'show your work' behind each finding.",
+    "implication": "Lets you challenge or validate AI logic. If reasoning is wrong, the conclusion is wrong — even if the number looks right.",
+    "lesson": "7-ai-to-action",
+    "screens": ["cfo-briefing"]
+  },
+  {
+    "term": "Consequence Preview",
+    "category": "Platform",
+    "definition": "AI-generated preview of what happens if you approve an action item — cash impact, runway change, downstream effects.",
+    "implication": "Decision support before you commit. Turns 'approve this' into 'approve this and here's what it costs/saves'.",
+    "lesson": "7-ai-to-action",
+    "screens": ["action-items"]
+  },
+  {
+    "term": "Provider",
+    "category": "Platform",
+    "definition": "The LLM API hosting each agent: Cerebras (fastest), Groq (versatile), or SambaNova (deep reasoning). Shown as colored pills in the UI.",
+    "implication": "Different models for different jobs — speed for live metrics, depth for fraud detection and executive synthesis.",
+    "lesson": "7-ai-to-action",
+    "screens": ["cfo-briefing"]
+  },
+  {
+    "term": "FP&A",
+    "category": "Finance",
+    "definition": "Financial Planning & Analysis — the team/function that builds budgets, forecasts, and variance reports.",
+    "implication": "At a firm like Vanguard, FP&A is a core career path. This platform automates the *monitoring* part of FP&A, not the judgment.",
+    "lesson": "1-cfo-monday",
+    "screens": ["budget", "cash-forecast"]
+  },
+  {
+    "term": "Series B",
+    "category": "Finance",
+    "definition": "A venture funding round. Acme raised $18M in March 2025 (Bessemer). Post-money valuation implies investor expectations for growth.",
+    "implication": "Series B companies are expected to have product-market fit and focus on scaling — but burn discipline still matters for runway.",
+    "lesson": "1-cfo-monday",
+    "screens": ["cfo-briefing"]
+  },
+  {
+    "term": "SLO (Service Level Objective)",
+    "category": "Finance",
+    "definition": "At Acme, employees are compensated partly on company performance targets (SLO-based). 47 employees.",
+    "implication": "Headcount is the largest burn driver. SLO-based comp ties individual incentives to company outcomes.",
+    "lesson": "1-cfo-monday",
+    "screens": []
+  },
+  {
+    "term": "Escalation",
+    "category": "Platform",
+    "definition": "Flag when an agent conclusion requires C-level attention — typically high-dollar RED items or cross-functional issues.",
+    "implication": "Not every RED goes to the CEO. Escalation filters what actually needs executive time vs what a controller can handle.",
+    "lesson": "7-ai-to-action",
+    "screens": ["cfo-briefing", "action-items"]
+  }
+]

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 60" fill="none">
+  <rect width="400" height="60" rx="8" fill="#27272a" stroke="#3f3f46"/>
+  <rect x="12" y="18" width="72" height="24" rx="12" fill="#7c3aed33" stroke="#7c3aed"/>
+  <text x="22" y="34" fill="#a78bfa" font-size="8">Cerebras</text>
+  <text x="96" y="34" fill="#a1a1aa" font-size="9">gpt-oss-120b</text>
+  <circle cx="200" cy="30" r="5" fill="#22c55e"/>
+  <text x="212" y="34" fill="#71717a" font-size="8">Complete � 2 min ago</text>
+  <rect x="320" y="18" width="68" height="24" rx="4" fill="#3f3f46"/>
+  <text x="332" y="34" fill="#fafafa" font-size="8">Re-run</text>
+</svg>

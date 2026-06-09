@@ -16,16 +16,20 @@ interface ActionItem {
   notes: string
   owner: string
   created_at: string
+  due_date: string
 }
 
 interface Props {
   item: ActionItem | null
+  initialDecision?: 'approved' | 'delegated' | 'dismissed'
+  simulationMode?: boolean
   onClose: () => void
   onUpdate: () => void
+  onSimApprove?: (item: ActionItem) => void
 }
 
 const AGENT_LABELS: Record<string, string> = {
-  'cash-reporter': '💵 Cash Position',
+  'cash-reporter': '🏛️ Treasury',
   'cash-forecast': '📈 Cash Forecast',
   'budget-analyst': '📊 Budget',
   'ar-collections': '📥 Collections',
@@ -67,7 +71,21 @@ function parseSections(text: string): Record<string, string> {
 
 interface ChatMsg { role: 'user' | 'assistant'; content: string }
 
-function Inner({ item, onClose, onUpdate }: { item: ActionItem; onClose: () => void; onUpdate: () => void }) {
+function Inner({
+  item,
+  initialDecision,
+  simulationMode,
+  onClose,
+  onUpdate,
+  onSimApprove,
+}: {
+  item: ActionItem
+  initialDecision?: DecisionType
+  simulationMode?: boolean
+  onClose: () => void
+  onUpdate: () => void
+  onSimApprove?: (item: ActionItem) => void
+}) {
   const existingDecision = detectDecision(item.notes ?? '')
   const [phase, setPhase] = useState<Phase>(existingDecision ? 'decided' : 'deciding')
   const [pendingDecision, setPendingDecision] = useState<DecisionType | null>(null)
@@ -88,6 +106,7 @@ function Inner({ item, onClose, onUpdate }: { item: ActionItem; onClose: () => v
   const [chatLoading, setChatLoading] = useState(false)
   const chatEndRef = useRef<HTMLDivElement>(null)
   const artifactAbortRef = useRef<AbortController | null>(null)
+  const initialDecisionHandled = useRef(false)
 
   // Auto-load streaming analysis when drawer opens (only if not yet decided)
   function loadAnalysis() {
@@ -128,6 +147,14 @@ function Inner({ item, onClose, onUpdate }: { item: ActionItem; onClose: () => v
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [chatMessages])
+
+  useEffect(() => {
+    if (initialDecision && !existingDecision && !initialDecisionHandled.current) {
+      initialDecisionHandled.current = true
+      startPreview(initialDecision)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialDecision, item.id])
 
   async function startPreview(dec: DecisionType) {
     // For delegate, need name first — just set phase and let user fill form
@@ -183,22 +210,30 @@ function Inner({ item, onClose, onUpdate }: { item: ActionItem; onClose: () => v
     setSaving(true)
     const statusMap: Record<DecisionType, string> = { approved: 'done', delegated: 'in-progress', dismissed: 'done' }
     const header = `[${pendingDecision.toUpperCase()} ${new Date().toLocaleDateString()}]`
+      + (simulationMode ? ' [SIMULATED]' : '')
       + (pendingDecision === 'delegated' && delegateName ? ` → ${delegateName}${delegateDept ? ` (${delegateDept})` : ''}` : '')
       + (note ? ` — ${note}` : '')
     const noteText = header + (editedArtifact ? `\n\n${editedArtifact}` : '')
-    await fetch('/api/action-items', {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        id: item.id,
-        status: statusMap[pendingDecision],
-        notes: noteText,
-        ...(pendingDecision === 'delegated' && delegateName ? { owner: delegateName } : {}),
-      }),
-    })
+
+    if (!simulationMode) {
+      await fetch('/api/action-items', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: item.id,
+          status: statusMap[pendingDecision],
+          notes: noteText,
+          ...(pendingDecision === 'delegated' && delegateName ? { owner: delegateName } : {}),
+        }),
+      })
+    }
     setSaving(false)
-    onUpdate()
-    onClose()
+    if (!simulationMode) {
+      onUpdate()
+    } else if (pendingDecision === 'approved') {
+      onSimApprove?.(item)
+    }
+    setPhase('decided')
   }
 
   async function undo() {
@@ -371,7 +406,9 @@ function Inner({ item, onClose, onUpdate }: { item: ActionItem; onClose: () => v
             disabled={saving || artifactLoading || (pendingDecision === 'delegated' && !editedArtifact)}
             onClick={confirmDecision}
           >
-            {saving ? 'Saving…' : `✓ Confirm — ${pendingDecision === 'approved' ? 'Mark Resolved' : pendingDecision === 'delegated' ? `Assign to ${delegateName || 'Team'}` : 'Dismiss'}`}
+            {saving ? 'Saving…' : simulationMode
+              ? `✓ Confirm Simulation — ${pendingDecision === 'approved' ? 'Preview Only' : pendingDecision === 'delegated' ? 'Preview Delegation' : 'Preview Dismiss'}`
+              : `✓ Confirm — ${pendingDecision === 'approved' ? 'Mark Resolved' : pendingDecision === 'delegated' ? `Assign to ${delegateName || 'Team'}` : 'Dismiss'}`}
           </Button>
         </div>
       )}
@@ -538,11 +575,21 @@ function Inner({ item, onClose, onUpdate }: { item: ActionItem; onClose: () => v
   )
 }
 
-export default function ActionItemDetail({ item, onClose, onUpdate }: Props) {
+export default function ActionItemDetail({ item, initialDecision, simulationMode, onClose, onUpdate, onSimApprove }: Props) {
   return (
     <Sheet open={!!item} onOpenChange={open => !open && onClose()}>
       <SheetContent side="right" className="w-full max-w-lg flex flex-col overflow-hidden p-6">
-        {item && <Inner key={item.id} item={item} onClose={onClose} onUpdate={onUpdate} />}
+        {item && (
+          <Inner
+            key={`${item.id}-${initialDecision ?? 'none'}`}
+            item={item}
+            initialDecision={initialDecision}
+            simulationMode={simulationMode}
+            onClose={onClose}
+            onUpdate={onUpdate}
+            onSimApprove={onSimApprove}
+          />
+        )}
       </SheetContent>
     </Sheet>
   )

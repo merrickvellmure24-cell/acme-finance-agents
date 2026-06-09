@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200" fill="none">
+  <rect width="400" height="200" rx="8" fill="#27272a" stroke="#3f3f46"/>
+  <text x="12" y="20" fill="#fafafa" font-size="11" font-weight="bold">Transactions</text>
+  <rect x="12" y="28" width="280" height="24" rx="4" fill="#18181b" stroke="#3f3f46"/>
+  <text x="20" y="44" fill="#71717a" font-size="8">Filter: vendor, dept, category, date...</text>
+  <rect x="300" y="28" width="88" height="24" rx="4" fill="#3f3f46"/>
+  <text x="312" y="44" fill="#fafafa" font-size="8">Export CSV</text>
+  <rect x="12" y="60" width="376" height="120" rx="4" fill="#18181b" stroke="#3f3f46"/>
+  <text x="20" y="78" fill="#a1a1aa" font-size="7" font-family="monospace">69 TRANSACTIONS</text>
+  <text x="20" y="96" fill="#fafafa" font-size="8">2025-05-01  MODEX  Marketing  $45,000</text>
+  <text x="20" y="112" fill="#fafafa" font-size="8">2025-04-28  Apex Logistics  Ops  $7,250</text>
+  <text x="20" y="128" fill="#fafafa" font-size="8">2025-04-28  Apex Logistics  Ops  $7,250</text>
+  <text x="20" y="144" fill="#ef4444" font-size="7">� duplicate</text>
+</svg>
