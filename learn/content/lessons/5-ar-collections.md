@@ -40,13 +40,13 @@ At asset managers like Vanguard, AR is less central (clients pay fees on schedul
 
 ## On the dashboard
 
-- **KPI Bar** → AR Overdue card ($186K, High Risk badge)
+- **KPI Bar** → AR Overdue card ($186K, High Risk badge — just below the top nav)
 - **Collections tab** → aging bar chart + invoice table with days overdue and last contact date
 - **Conclusion cards** → agent prioritizes which accounts need urgent action
 
 ## Try it
 
-1. Go to **Collections** in the sidebar
+1. Click **Collections** in the top nav
 2. Find **MidWest Fulfillment** in the invoice table — note amount and days overdue
 3. Look at the aging chart — which bucket has the most dollars?
 4. Read the agent's RED conclusion about MidWest

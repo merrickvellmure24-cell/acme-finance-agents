@@ -35,18 +35,18 @@ The Apex Logistics duplicate ($14.5K) is exactly the kind of error that slips th
 
 ## On the dashboard
 
-- **KPI Bar** → AP at Risk card ($78K)
+- **KPI Bar** → AP at Risk card ($78K — just below the top nav)
 - **Payables tab** → invoice table sorted by overdue days, fraud audit section, payment holds
-- **Contracts tab** → vendor risk table sorted by exposure
-- **Transactions tab** → filter by vendor name (e.g. "Apex Logistics")
+- **Data ▾ → Contracts** → vendor risk table sorted by exposure
+- **Data ▾ → Transactions** → filter by vendor name (e.g. "Apex Logistics")
 
 ## Try it
 
-1. Go to **Payables** in the sidebar
+1. Click **Payables** in the top nav
 2. Find the **fraud audit** section — read the Apex Logistics duplicate finding
 3. Check the invoice table for payment hold flags
-4. Switch to **Contracts** — find vendors with month-to-month or no contract
-5. Go to **Transactions** — filter by "Apex Logistics" and count duplicate-looking entries
+4. Open **Data ▾ → Contracts** — find vendors with month-to-month or no contract
+5. Open **Data ▾ → Transactions** — filter by "Apex Logistics" and count duplicate-looking entries
 
 ## If they ask…
 

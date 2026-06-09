@@ -130,7 +130,7 @@
   {
     "term": "RED Conclusion",
     "category": "Platform",
-    "definition": "Critical finding requiring immediate action. Highest severity in agent output. Auto-creates an action item on Run All.",
+    "definition": "Critical finding requiring immediate action. Highest severity in agent output. Auto-creates an action item when you click ↻ Update.",
     "implication": "RED items are your Monday morning priority list. Each should have a dollar impact and a clear decision.",
     "lesson": "7-ai-to-action",
     "screens": ["cfo-briefing", "action-items"]
@@ -168,10 +168,10 @@
     "screens": ["cfo-briefing"]
   },
   {
-    "term": "Run All",
+    "term": "↻ Update",
     "category": "Platform",
-    "definition": "Executes all 6 specialist agents in parallel, then the CFO Briefing agent sequentially, then creates action items from RED conclusions.",
-    "implication": "The primary refresh button. Run after data updates or at the start of each week for a fresh executive picture.",
+    "definition": "Executes all 6 specialist agents in parallel, then the CFO Briefing agent sequentially, then creates action items from RED conclusions. Found in the top-right of the top nav.",
+    "implication": "The primary refresh button. Run at the start of each week for a fresh executive picture. Progress shows as ◌ 3/7 while running.",
     "lesson": "7-ai-to-action",
     "screens": ["cfo-briefing"]
   },

@@ -38,15 +38,15 @@ At Acme, the conference overages are a **one-time event** that still impacts run
 
 ## On the dashboard
 
-- **Budget tab** → grouped bar chart (planned vs actual by department)
+- **Budget tab** → grouped bar chart (planned vs actual by department) — click in the top nav
 - **Variance table** → sortable dollar and % columns
-- **Transactions tab** → drill into specific vendor spend (filter by department)
+- **Data ▾ → Transactions** → drill into specific vendor spend (filter by department)
 
 ## Try it
 
-1. Go to **Budget** in the sidebar
+1. Click **Budget** in the top nav
 2. Find the department with the largest over-budget variance
-3. Cross-reference with **Transactions** — filter by that department
+3. Cross-reference with **Data ▾ → Transactions** — filter by that department
 4. Look for MODEX and ProMat line items
 5. Read the agent's conclusion — does it flag the conference overages?
 

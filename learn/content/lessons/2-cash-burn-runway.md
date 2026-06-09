@@ -42,15 +42,15 @@ At 9.5 months, Acme is in the **"board conversation"** zone. The CFO would:
 
 ## On the dashboard
 
-- **KPI Bar** → Cash on Hand + Runway cards
-- **Cash Position tab** → 8-week area chart + weekly burn bars
+- **KPI Bar** → Cash on Hand + Runway cards (just below the top nav)
+- **Treasury tab** → 8-week area chart + weekly burn bars
 - **Conclusion cards** → Agent flags burn vs guidance gaps
 
 The area chart shows three lines: total cash, operating, and reserve. The burn bar chart shows week-over-week spend — spikes are visible immediately.
 
 ## Try it
 
-1. Go to **Cash Position** in the sidebar
+1. Click **Treasury** in the top nav
 2. Look at the weekly burn bar chart — identify the highest week
 3. Find the RED or YELLOW conclusion about burn rate
 4. Calculate runway yourself: $12.68M ÷ $1.34M = ~9.5 months. Does the KPI bar agree?

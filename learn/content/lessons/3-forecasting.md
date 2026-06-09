@@ -31,13 +31,13 @@ A CFO presents all three scenarios to the board, not just the optimistic one. Th
 
 ## On the dashboard
 
-- **Cash Forecast tab** → 9-month line chart with three scenario lines
+- **Forecast tab** → 9-month line chart with three scenario lines (click in the top nav)
 - **Conclusion cards** → Agent identifies the month cash becomes critical
 - Cross-reference with **KPI Bar runway** — forecast should be directionally consistent
 
 ## Try it
 
-1. Go to **Cash Forecast** in the sidebar
+1. Click **Forecast** in the top nav
 2. Identify where the **current trajectory** line drops below $2M (typical minimum operating buffer)
 3. Compare the gap between current trajectory and spending discipline — that's the "cost of inaction"
 4. Read the agent's RED/YELLOW conclusions about critical months

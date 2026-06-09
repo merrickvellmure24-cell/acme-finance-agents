@@ -1,6 +1,6 @@
 ## Concept
 
-This lesson connects the **AI architecture** to what you see on screen. When you click **Run All**, here's what actually happens:
+This lesson connects the **AI architecture** to what you see on screen. When you click **↻ Update** (top right), here's what actually happens:
 
 ### The flow
 
@@ -67,7 +67,7 @@ When you're **vibecoding** (building with AI assistance), you typically touch:
 - API routes in `src/app/api/`
 - **Not** the database client (`db.ts`) or API keys (`.env.local`)
 
-The agents run automatically when you click Run All — you don't call LLMs manually.
+The agents run automatically when you click **↻ Update** — you don't call LLMs manually.
 
 ## On the dashboard
 

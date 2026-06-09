@@ -94,7 +94,7 @@ At a firm like Vanguard, scenario analysis is central to portfolio construction 
 
 1. Switch to **⚗ Hypo** mode
 2. Open **⚙ Scenarios** and drag "Burn Rate Reduction" to 25% — note the new runway
-3. Close scenarios, then approve the MidWest Fulfillment AR action item in the sidebar
+3. Close scenarios, then approve the MidWest Fulfillment AR action item in the Action Items sidebar (right side)
 4. Look at the KPI bar — Cash on Hand should show `⚗ +$48K sim`
 5. The AR Overdue card should show `⚗ -$48K`
 6. Check the Financial Snapshot Card — the green dashed line shows the sim-adjusted trajectory
