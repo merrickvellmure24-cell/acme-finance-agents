@@ -23,7 +23,7 @@ const DATA_ITEMS: { key: string; label: string; icon: string }[] = [
 
 const RESOURCE_LINKS: { href: string; label: string; icon: string; sub: string }[] = [
   { href: '/about', label: 'Project Resources', icon: '📄', sub: 'README, tests, run commands' },
-  { href: '/about#learn', label: 'Finance Academy', icon: '🎓', sub: 'localhost:3002 · 9 lessons' },
+  { href: 'https://acme-finance-agents-xzqv.vercel.app', label: 'Finance Academy', icon: '🎓', sub: 'acme-finance-agents-xzqv.vercel.app' },
   { href: '/welcome', label: 'Platform Guide', icon: '🗺️', sub: 'Agents, capabilities, demo' },
 ]
 

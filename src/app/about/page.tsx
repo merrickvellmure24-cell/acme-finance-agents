@@ -133,7 +133,7 @@ export default function AboutPage() {
           <div className="flex items-start gap-4">
             <span className="text-4xl">🎓</span>
             <div className="flex-1">
-              <h2 className="text-lg font-semibold mb-1">Finance Academy — <code className="text-base font-mono text-green-400">localhost:3002</code></h2>
+              <h2 className="text-lg font-semibold mb-1">Finance Academy — <a href="https://acme-finance-agents-xzqv.vercel.app" target="_blank" rel="noreferrer" className="text-base font-mono text-green-400 hover:underline">acme-finance-agents-xzqv.vercel.app</a></h2>
               <p className="text-sm text-muted-foreground mb-4">
                 A separate companion app with 9 lessons explaining the finance behind this dashboard,
                 the app architecture, and interview prep for each concept. Built to help you explain
@@ -162,36 +162,13 @@ export default function AboutPage() {
                 ))}
               </div>
 
-              <div className="grid md:grid-cols-2 gap-3 mt-1">
-                <div className="rounded-lg border border-green-500/40 bg-card p-4">
-                  <p className="text-xs font-semibold text-foreground mb-2">🚀 Deployed (if available)</p>
-                  <p className="text-xs text-muted-foreground mb-2">
-                    If the Academy has been deployed to Vercel, open it directly — no terminal needed.
-                  </p>
-                  <p className="text-[11px] text-muted-foreground/50">
-                    Deploy from <a href="https://vercel.com/new" target="_blank" rel="noreferrer" className="text-green-400 hover:underline">vercel.com/new</a> →
-                    Import this GitHub repo → set Root Directory to <code className="bg-muted px-1 rounded">learn</code>
-                  </p>
-                </div>
-                <div className="rounded-lg border border-border bg-muted/20 p-4">
-                  <p className="text-xs font-semibold text-foreground mb-2">💻 Run locally</p>
-                  <ol className="text-xs text-muted-foreground space-y-1.5 list-decimal ml-4">
-                    <li>Open a new terminal</li>
-                    <li><code className="bg-muted px-1 rounded font-mono text-[10px]">cd ~/Desktop/acme-finance-agents/learn</code></li>
-                    <li><code className="bg-muted px-1 rounded font-mono text-[10px]">npm run dev</code></li>
-                    <li>Open <a href="http://localhost:3002" target="_blank" rel="noreferrer" className="text-green-400 hover:underline">localhost:3002</a></li>
-                  </ol>
-                </div>
-              </div>
-
               <a
-                href="http://localhost:3002"
+                href="https://acme-finance-agents-xzqv.vercel.app"
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center gap-2 mt-3 px-4 py-2 rounded-lg border border-green-500/40 bg-green-500/10 text-green-300 text-sm hover:bg-green-500/20 transition"
               >
                 Open Finance Academy ↗
-                <span className="text-[10px] text-green-400/60">(local) or your deployed URL</span>
               </a>
             </div>
           </div>

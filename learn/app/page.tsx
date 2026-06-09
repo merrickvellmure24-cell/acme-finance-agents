@@ -17,9 +17,8 @@ export default function HomePage() {
       <section className="mb-10 p-5 rounded-lg border border-border bg-card">
         <h2 className="text-sm font-semibold text-foreground mb-3">How to use this course</h2>
         <ol className="text-sm text-muted-foreground space-y-2 list-decimal ml-5">
-          <li>Keep the <strong className="text-foreground">dashboard</strong> running at <code className="text-xs bg-muted px-1 rounded">localhost:3000</code></li>
-          <li>Read each lesson here at <code className="text-xs bg-muted px-1 rounded">localhost:3002</code></li>
-          <li>Complete the <strong className="text-foreground">Try it</strong> step in the dashboard after each lesson</li>
+          <li>Open the <strong className="text-foreground">dashboard</strong> at <a href="https://acme-finance-agents.vercel.app" target="_blank" rel="noreferrer" className="text-primary hover:underline">acme-finance-agents.vercel.app</a></li>
+          <li>Read each lesson here and complete the <strong className="text-foreground">Try it</strong> step in the dashboard after each one</li>
           <li>Use <strong className="text-foreground">Glossary</strong> and <strong className="text-foreground">Screen Guide</strong> as reference while exploring</li>
           <li>Before an interview, rehearse <strong className="text-foreground">Interview Prep</strong></li>
         </ol>
