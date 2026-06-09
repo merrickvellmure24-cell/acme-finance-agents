@@ -245,6 +245,7 @@ export default function Home() {
             simApprovedItems={simApprovedItems}
             simDeltas={simDeltas}
             onResetSim={handleResetSim}
+            onSimApprove={handleSimApprove}
           />
         )}
       </div>

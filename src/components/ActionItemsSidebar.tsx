@@ -54,6 +54,7 @@ interface Props {
   simApprovedItems?: ActionItem[]
   simDeltas?: AggregateSimDelta | null
   onResetSim?: () => void
+  onSimApprove?: (item: ActionItem) => void
 }
 
 export default function ActionItemsSidebar({
@@ -64,6 +65,7 @@ export default function ActionItemsSidebar({
   simApprovedItems = [],
   simDeltas,
   onResetSim,
+  onSimApprove,
 }: Props) {
   const [resolvedOpen, setResolvedOpen] = useState(false)
 
@@ -166,9 +168,15 @@ export default function ActionItemsSidebar({
                   size="sm"
                   variant="ghost"
                   className="h-6 text-[10px] px-2 bg-green-600/20 border border-green-500/30 text-green-300 hover:bg-green-600/40"
-                  onClick={() => onSelectItem(item, 'approved')}
+                  onClick={() => {
+                    if (isHypothetical && onSimApprove) {
+                      onSimApprove(item)
+                    } else {
+                      onSelectItem(item, 'approved')
+                    }
+                  }}
                 >
-                  ✓ Approve
+                  ✓ {isHypothetical ? 'Sim Approve' : 'Approve'}
                 </Button>
                 <Button
                   size="sm"

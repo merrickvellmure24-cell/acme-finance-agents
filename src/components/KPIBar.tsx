@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
@@ -73,6 +73,8 @@ interface Props {
 
 export default function KPIBar({ runStatus, simDeltas }: Props) {
   const [m, setM] = useState<Metrics | null>(null)
+  const [flashSim, setFlashSim] = useState(false)
+  const prevSimCount = useRef(0)
   void runStatus
 
   useEffect(() => {
@@ -85,6 +87,17 @@ export default function KPIBar({ runStatus, simDeltas }: Props) {
     const id = setInterval(load, 60000)
     return () => clearInterval(id)
   }, [])
+
+  // Flash the bar whenever a new sim delta is applied
+  useEffect(() => {
+    const hasDeltas = simDeltas && (simDeltas.cashDelta !== 0 || simDeltas.arOverdueDelta !== 0 || simDeltas.apRiskDelta !== 0 || simDeltas.monthlyBurnDelta !== 0)
+    const count = hasDeltas ? 1 : 0
+    if (count > prevSimCount.current) {
+      setFlashSim(true)
+      setTimeout(() => setFlashSim(false), 800)
+    }
+    prevSimCount.current = count
+  }, [simDeltas])
 
   if (!m) return (
     <div className="border-b border-border bg-card/50 px-4 py-3 flex-shrink-0">
@@ -139,7 +152,7 @@ export default function KPIBar({ runStatus, simDeltas }: Props) {
     : undefined
 
   return (
-    <div className="border-b border-border bg-card/50 px-4 py-3 flex-shrink-0">
+    <div className={`border-b border-border bg-card/50 px-4 py-3 flex-shrink-0 transition-colors duration-300 ${flashSim ? 'bg-yellow-500/10' : ''}`}>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <KPICard
           label="Cash on Hand"
