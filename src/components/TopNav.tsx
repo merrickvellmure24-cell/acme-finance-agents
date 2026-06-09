@@ -85,20 +85,28 @@ export default function TopNav({ activeTab, onTabChange, platformMode, onPlatfor
                   <div className="px-3 py-2 border-b border-border">
                     <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Resources</p>
                   </div>
-                  {RESOURCE_LINKS.map(({ href, label, icon, sub }) => (
-                    <Link
-                      key={href}
-                      href={href}
-                      onClick={() => setResourcesOpen(false)}
-                      className="flex items-start gap-2.5 px-3 py-2.5 hover:bg-muted transition"
-                    >
-                      <span className="text-base shrink-0 mt-0.5">{icon}</span>
-                      <div>
-                        <p className="text-xs font-medium text-foreground">{label}</p>
-                        <p className="text-[10px] text-muted-foreground">{sub}</p>
-                      </div>
-                    </Link>
-                  ))}
+                  {RESOURCE_LINKS.map(({ href, label, icon, sub }) => {
+                    const isExternal = href.startsWith('http')
+                    const cls = "flex items-start gap-2.5 px-3 py-2.5 hover:bg-muted transition"
+                    const inner = (
+                      <>
+                        <span className="text-base shrink-0 mt-0.5">{icon}</span>
+                        <div>
+                          <p className="text-xs font-medium text-foreground">{label}</p>
+                          <p className="text-[10px] text-muted-foreground">{sub}</p>
+                        </div>
+                      </>
+                    )
+                    return isExternal ? (
+                      <a key={href} href={href} target="_blank" rel="noreferrer" onClick={() => setResourcesOpen(false)} className={cls}>
+                        {inner}
+                      </a>
+                    ) : (
+                      <Link key={href} href={href} onClick={() => setResourcesOpen(false)} className={cls}>
+                        {inner}
+                      </Link>
+                    )
+                  })}
                 </div>
               )}
             </div>
