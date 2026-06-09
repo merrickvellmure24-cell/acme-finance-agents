@@ -56,10 +56,10 @@
     "screens": ["kpi-bar", "payables"]
   },
   {
-    "term": "DSO (Days Sales Outstanding)",
+    "term": "Avg AR Age",
     "category": "Receivables",
-    "definition": "Average days to collect payment after invoicing. Healthy B2B: 30–45 days. Above 60 days signals collections problems.",
-    "implication": "High DSO means you're effectively lending money to customers. Every day of DSO above terms is working capital trapped.",
+    "definition": "Dollar-weighted average age of open receivables. True DSO requires credit sales over a period; this dashboard uses AR age because the demo data is an open-invoice aging file.",
+    "implication": "High AR age means cash is trapped with customers and some invoices may become bad debt.",
     "lesson": "5-ar-collections",
     "screens": ["collections"]
   },

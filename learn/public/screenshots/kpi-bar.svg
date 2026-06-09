@@ -5,7 +5,7 @@
   <text x="16" y="42" fill="#fafafa" font-size="14" font-weight="bold" font-family="sans-serif">$12.68M</text>
   <rect x="104" y="8" width="90" height="50" rx="4" fill="#18181b" stroke="#ef4444"/>
   <text x="112" y="24" fill="#a1a1aa" font-size="8" font-family="monospace">RUNWAY</text>
-  <text x="112" y="42" fill="#fafafa" font-size="14" font-weight="bold" font-family="sans-serif">~10.6mo</text>
+  <text x="112" y="42" fill="#fafafa" font-size="14" font-weight="bold" font-family="sans-serif">~9.5mo</text>
   <text x="112" y="52" fill="#ef4444" font-size="7" font-family="monospace">CRITICAL</text>
   <rect x="200" y="8" width="90" height="50" rx="4" fill="#18181b" stroke="#facc15"/>
   <text x="208" y="24" fill="#a1a1aa" font-size="8" font-family="monospace">AR OVERDUE</text>

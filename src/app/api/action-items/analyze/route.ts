@@ -21,7 +21,7 @@ export async function POST(req: Request) {
     context = { cash_balance: cash, ar_aging: ar, ap_aging: ap }
   }
 
-  const systemPrompt = `You are a senior CFO advisor for Acme Robotics (Series B, $12.68M cash, 47 employees, ~10.6 months runway at $1.19M/mo burn).
+  const systemPrompt = `You are a senior CFO advisor for Acme Robotics (Series B, $12.68M cash, 47 employees, ~9.5 months runway at ~$1.34M/mo burn). If the live financial data below conflicts with this summary, trust the live data.
 
 An action item has been flagged. Analyze it and respond in EXACTLY this format with these headers:
 

@@ -1,14 +1,23 @@
 import { Redis } from "@upstash/redis";
 
-export const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL!,
-  token: process.env.UPSTASH_REDIS_REST_TOKEN!,
-});
+let redis: Redis | null = null
+
+function getRedisClient() {
+  const url = process.env.UPSTASH_REDIS_REST_URL
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN
+
+  if (!url || !token) {
+    throw new Error("Missing UPSTASH_REDIS_REST_URL or UPSTASH_REDIS_REST_TOKEN")
+  }
+
+  redis ??= new Redis({ url, token })
+  return redis
+}
 
 export async function getCached<T>(key: string): Promise<T | null> {
-  return redis.get<T>(key);
+  return getRedisClient().get<T>(key);
 }
 
 export async function setCache(key: string, value: unknown, ttlSeconds = 300) {
-  await redis.set(key, value, { ex: ttlSeconds });
+  await getRedisClient().set(key, value, { ex: ttlSeconds });
 }

@@ -1,9 +1,28 @@
 import { createClient } from "@libsql/client";
 
-export const db = createClient({
-  url: process.env.TURSO_DATABASE_URL!,
-  authToken: process.env.TURSO_AUTH_TOKEN!,
-});
+type DbClient = ReturnType<typeof createClient>
+
+let client: DbClient | null = null
+
+function getDbClient(): DbClient {
+  const url = process.env.TURSO_DATABASE_URL
+  const authToken = process.env.TURSO_AUTH_TOKEN
+
+  if (!url || !authToken) {
+    throw new Error("Missing TURSO_DATABASE_URL or TURSO_AUTH_TOKEN")
+  }
+
+  client ??= createClient({ url, authToken })
+  return client
+}
+
+export const db = new Proxy({} as DbClient, {
+  get(_target, prop: keyof DbClient) {
+    const dbClient = getDbClient()
+    const value = dbClient[prop]
+    return typeof value === "function" ? value.bind(dbClient) : value
+  },
+})
 
 export async function initDb() {
   await db.executeMultiple(`

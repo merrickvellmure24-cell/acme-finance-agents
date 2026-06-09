@@ -133,7 +133,7 @@ export default function AboutPage() {
           <div className="flex items-start gap-4">
             <span className="text-4xl">🎓</span>
             <div className="flex-1">
-              <h2 className="text-lg font-semibold mb-1">Finance Academy — <a href="https://acme-finance-agents-xzqv.vercel.app" target="_blank" rel="noreferrer" className="text-base font-mono text-green-400 hover:underline">acme-finance-agents-xzqv.vercel.app</a></h2>
+              <h2 className="text-lg font-semibold mb-1">Finance Academy — <a href="https://acme-finance-agents-xzqv.vercel.app" target="_blank" rel="noopener noreferrer" className="text-base font-mono text-green-400 hover:underline">acme-finance-agents-xzqv.vercel.app</a></h2>
               <p className="text-sm text-muted-foreground mb-4">
                 A separate companion app with 9 lessons explaining the finance behind this dashboard,
                 the app architecture, and interview prep for each concept. Built to help you explain
@@ -165,7 +165,7 @@ export default function AboutPage() {
               <a
                 href="https://acme-finance-agents-xzqv.vercel.app"
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 mt-3 px-4 py-2 rounded-lg border border-green-500/40 bg-green-500/10 text-green-300 text-sm hover:bg-green-500/20 transition"
               >
                 Open Finance Academy ↗

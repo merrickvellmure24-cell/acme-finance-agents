@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { LESSONS } from '@/lib/lessons'
+import { DASHBOARD_URL, LESSONS } from '@/lib/lessons'
 import { getCompletedLessons } from '@/lib/progress'
 
 function NavLink({ href, children, active }: { href: string; children: React.ReactNode; active: boolean }) {
@@ -23,14 +23,17 @@ function NavLink({ href, children, active }: { href: string; children: React.Rea
 
 export function Sidebar() {
   const pathname = usePathname()
-  const [completed, setCompleted] = useState<string[]>([])
+  const [completed, setCompleted] = useState(() => getCompletedLessons())
 
   useEffect(() => {
-    setCompleted(getCompletedLessons())
+    const id = window.setTimeout(() => {
+      setCompleted(getCompletedLessons())
+    }, 0)
     const onStorage = () => setCompleted(getCompletedLessons())
     window.addEventListener('storage', onStorage)
     window.addEventListener('academy-progress', onStorage)
     return () => {
+      window.clearTimeout(id)
       window.removeEventListener('storage', onStorage)
       window.removeEventListener('academy-progress', onStorage)
     }
@@ -78,7 +81,7 @@ export function Sidebar() {
 
       <div className="px-4 py-4 border-t border-sidebar-border">
         <a
-          href="http://localhost:3000"
+          href={DASHBOARD_URL}
           target="_blank"
           rel="noopener noreferrer"
           className="text-xs text-muted-foreground hover:text-foreground transition-colors"

@@ -7,11 +7,11 @@ import {
 import { useCashData, fmtCash } from '@/lib/hooks/useCashData'
 
 const CASH_THRESHOLD = 3_000_000
-const BURN_GUIDANCE_MO = 1_000_000
 const BURN_GUIDANCE_WK = 231_000
 
 interface Props {
   simCashDelta?: number
+  simMonthlyBurnDelta?: number
 }
 
 function addMonths(isoDate: string, n: number) {
@@ -20,7 +20,7 @@ function addMonths(isoDate: string, n: number) {
   return d.toISOString().slice(0, 7).slice(5)
 }
 
-export default function FinancialSnapshotCard({ simCashDelta = 0 }: Props) {
+export default function FinancialSnapshotCard({ simCashDelta = 0, simMonthlyBurnDelta = 0 }: Props) {
   const { rows, loading } = useCashData()
 
   if (loading) {
@@ -34,22 +34,29 @@ export default function FinancialSnapshotCard({ simCashDelta = 0 }: Props) {
   const avgMonthlyBurn = avgWeeklyBurn * (52 / 12)
   const startCash = Number(latest.total_cash)
   const startDate = String(latest.week_ending)
+  const hasSim = simCashDelta !== 0 || simMonthlyBurnDelta !== 0
+  const adjustedCash = startCash + simCashDelta
+  const adjustedMonthlyBurn = Math.max(0, avgMonthlyBurn + simMonthlyBurnDelta)
+  const adjustedWeeklyBurn = adjustedMonthlyBurn / (52 / 12)
+  const displayedCash = hasSim ? adjustedCash : startCash
+  const displayedMonthlyBurn = hasSim ? adjustedMonthlyBurn : avgMonthlyBurn
+  const displayedWeeklyBurn = hasSim ? adjustedWeeklyBurn : avgWeeklyBurn
 
   const burnOverGuidancePct = BURN_GUIDANCE_WK > 0
-    ? Math.round((avgWeeklyBurn - BURN_GUIDANCE_WK) / BURN_GUIDANCE_WK * 100)
+    ? Math.round((displayedWeeklyBurn - BURN_GUIDANCE_WK) / BURN_GUIDANCE_WK * 100)
     : 0
-  const runwayMonths = avgMonthlyBurn > 0 ? startCash / avgMonthlyBurn : 0
+  const runwayMonths = displayedMonthlyBurn > 0 ? displayedCash / displayedMonthlyBurn : 0
   const runwayStatus: 'red' | 'yellow' | 'green' = runwayMonths < 12 ? 'red' : runwayMonths < 18 ? 'yellow' : 'green'
 
   // 9-month projection for the chart
   const forecastData = Array.from({ length: 10 }, (_, i) => {
     const label = i === 0 ? 'Now' : addMonths(startDate, i)
     const base = Math.max(0, startCash - avgMonthlyBurn * i)
-    const simAdj = simCashDelta !== 0 ? Math.max(0, startCash + simCashDelta - avgMonthlyBurn * i) : undefined
+    const simAdj = hasSim ? Math.max(0, adjustedCash - adjustedMonthlyBurn * i) : undefined
     return { month: label, base, simAdj }
   })
 
-  const monthsToThreshold = forecastData.findIndex(d => d.base <= CASH_THRESHOLD)
+  const monthsToThreshold = forecastData.findIndex(d => (hasSim ? d.simAdj ?? d.base : d.base) <= CASH_THRESHOLD)
   const thresholdMonth = monthsToThreshold > 0 ? forecastData[monthsToThreshold]?.month : null
 
   // Verdict headline
@@ -57,7 +64,7 @@ export default function FinancialSnapshotCard({ simCashDelta = 0 }: Props) {
   let verdictColor: string
   if (burnOverGuidancePct > 30) {
     verdict = thresholdMonth
-      ? `Cash hits $3M warning in ~${monthsToThreshold} months — burn 34% above target`
+      ? `Cash hits $3M warning in ~${monthsToThreshold} months — burn ${burnOverGuidancePct}% above target`
       : `Burn ${burnOverGuidancePct}% above guidance — runway risk building`
     verdictColor = 'text-red-400'
   } else if (burnOverGuidancePct > 10) {
@@ -76,8 +83,12 @@ export default function FinancialSnapshotCard({ simCashDelta = 0 }: Props) {
       {/* Verdict headline */}
       <p className={`text-xs font-semibold mb-3 leading-snug ${verdictColor}`}>
         {verdict}
-        {simCashDelta !== 0 && (
-          <span className="text-yellow-300 ml-2">· +{fmtCash(simCashDelta)} in simulation</span>
+        {hasSim && (
+          <span className="text-yellow-300 ml-2">
+            · simulation applied
+            {simCashDelta !== 0 ? ` · ${simCashDelta > 0 ? '+' : '-'}${fmtCash(Math.abs(simCashDelta))} cash` : ''}
+            {simMonthlyBurnDelta !== 0 ? ` · ${simMonthlyBurnDelta > 0 ? '+' : '-'}${fmtCash(Math.abs(simMonthlyBurnDelta))}/mo burn` : ''}
+          </span>
         )}
       </p>
 
@@ -87,9 +98,9 @@ export default function FinancialSnapshotCard({ simCashDelta = 0 }: Props) {
           <div>
             <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Total Cash</p>
             <p className="text-lg font-semibold tabular-nums">
-              {simCashDelta !== 0 ? fmtCash(startCash + simCashDelta) : fmtCash(startCash)}
+              {fmtCash(displayedCash)}
             </p>
-            <p className="text-[10px] text-muted-foreground">at {fmtCash(avgMonthlyBurn)}/mo burn</p>
+            <p className="text-[10px] text-muted-foreground">at {fmtCash(displayedMonthlyBurn)}/mo burn</p>
           </div>
 
           <div>
@@ -108,7 +119,7 @@ export default function FinancialSnapshotCard({ simCashDelta = 0 }: Props) {
             <p className={`text-lg font-semibold tabular-nums ${burnOverGuidancePct > 20 ? 'text-red-400' : burnOverGuidancePct > 5 ? 'text-yellow-400' : 'text-green-400'}`}>
               {burnOverGuidancePct > 0 ? `+${burnOverGuidancePct}%` : `${burnOverGuidancePct}%`}
             </p>
-            <p className="text-[10px] text-muted-foreground">{fmtCash(avgWeeklyBurn)}/wk actual</p>
+            <p className="text-[10px] text-muted-foreground">{fmtCash(displayedWeeklyBurn)}/wk {hasSim ? 'sim' : 'actual'}</p>
           </div>
 
           <div>
@@ -155,7 +166,7 @@ export default function FinancialSnapshotCard({ simCashDelta = 0 }: Props) {
                 label={{ value: '$3M min', fontSize: 9, fill: '#ef4444', position: 'insideTopRight' }}
               />
               <Area type="monotone" dataKey="base" stroke="#3b82f6" fill="url(#snapGrad)" strokeWidth={2} dot={false} name="Base case" />
-              {simCashDelta !== 0 && (
+              {hasSim && (
                 <Line type="monotone" dataKey="simAdj" stroke="#22c55e" strokeWidth={1.5} strokeDasharray="4 2" dot={false} name="Sim adjusted" />
               )}
             </ComposedChart>

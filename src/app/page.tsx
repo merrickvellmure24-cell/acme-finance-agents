@@ -217,7 +217,6 @@ export default function Home() {
               agentStates={Object.fromEntries(AGENT_KEYS.filter(k => k !== 'briefing').map(k => [k, agents[k]]))}
               onJumpToTab={tab => setActiveTab(tab as Tab)}
               onRerun={() => handleRerun('briefing')}
-              hypoInputs={isHypothetical ? hypoInputs : undefined}
               simDeltas={simDeltas}
             />
           )}

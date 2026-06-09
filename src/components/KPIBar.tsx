@@ -73,6 +73,7 @@ interface Props {
 
 export default function KPIBar({ runStatus, simDeltas }: Props) {
   const [m, setM] = useState<Metrics | null>(null)
+  void runStatus
 
   useEffect(() => {
     const load = () =>
@@ -129,9 +130,13 @@ export default function KPIBar({ runStatus, simDeltas }: Props) {
 
   function simBadgeFor(delta: number): string | undefined {
     if (!hasSim || delta === 0) return undefined
-    const sign = delta > 0 ? '+' : ''
+    const sign = delta > 0 ? '+' : '-'
     return `${sign}${fmt(Math.abs(delta))} sim`
   }
+  const baseRunway = m.monthlyBurn > 0 ? m.totalCash / m.monthlyBurn : 0
+  const runwaySimBadge = hasSim && Math.abs(adjRunway - baseRunway) >= 0.05
+    ? `${adjRunway >= baseRunway ? '+' : ''}${(adjRunway - baseRunway).toFixed(1)}mo sim`
+    : undefined
 
   return (
     <div className="border-b border-border bg-card/50 px-4 py-3 flex-shrink-0">
@@ -152,7 +157,7 @@ export default function KPIBar({ runStatus, simDeltas }: Props) {
           badge={runwayBadge}
           sub={`Target: ${TARGET_RUNWAY_MO}mo · ${runwayDelta >= 0 ? '+' : ''}${runwayDelta.toFixed(1)}mo vs target`}
           accent={runwayAccent}
-          simBadge={hasSim && simDeltas ? `${(adjRunway - m.monthlyBurn > 0 ? m.totalCash / m.monthlyBurn : 0).toFixed(1) !== adjRunway.toFixed(1) ? `${adjRunway.toFixed(1)}mo sim` : ''}` : undefined}
+          simBadge={runwaySimBadge}
         />
         <KPICard
           label="AR Overdue"

@@ -4,7 +4,7 @@
     "icon": "📊",
     "title": "KPI Bar (Top of Dashboard)",
     "location": "Always visible at top of main page",
-    "whatYouSee": "Four metric cards: Cash on Hand ($12.68M), Runway (~10.6mo), AR Overdue ($186K), AP at Risk ($78K). Color-coded health badges (Critical, High Risk, etc.).",
+    "whatYouSee": "Four metric cards: Cash on Hand ($12.68M), Runway (~9.5mo), AR Overdue ($186K), AP at Risk ($78K). Color-coded health badges (Critical, High Risk, etc.).",
     "whatItMeans": "Your 10-second financial vital signs. Cash and runway tell you survival timeline. AR overdue is money stuck with customers. AP at risk is money you might pay incorrectly.",
     "whatToDo": "If Runway shows Critical — open Cash Forecast and CFO Briefing immediately. If AR Overdue is High Risk — prioritize Collections tab. If AP at Risk is elevated — review Payables before approving payments.",
     "lesson": "1-cfo-monday",
@@ -66,9 +66,9 @@
     "location": "Top nav → 📥 Collections",
     "whatYouSee": "AR aging bar chart by bucket, invoice table (customer, amount, days overdue, last contact), agent conclusions. MidWest Fulfillment $48K at 92 days is a key example.",
     "whatItMeans": "Money customers owe you. Aging shows collection risk. High days overdue = cash trapped and potential bad debt.",
-    "whatToDo": "Prioritize 90+ day invoices. Call MidWest Fulfillment immediately. Track DSO trend. Use Send Reminder for 30–60 day accounts.",
+    "whatToDo": "Prioritize 90+ day invoices. Call MidWest Fulfillment immediately. Track weighted AR age. Use Send Reminder for 30–60 day accounts.",
     "lesson": "5-ar-collections",
-    "terms": ["AR (Accounts Receivable)", "DSO (Days Sales Outstanding)", "Aging Bucket"],
+    "terms": ["AR (Accounts Receivable)", "Avg AR Age", "Aging Bucket"],
     "screenshot": "/screenshots/collections.svg"
   },
   {

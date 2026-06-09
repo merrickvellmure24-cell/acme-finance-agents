@@ -67,8 +67,8 @@ export default function CollectionsCharts() {
   const totalAR = rows.reduce((s, r) => s + Number(r.amount), 0)
   const overdue = rows.filter(r => Number(r.days_outstanding) > 0)
   const overdueTotal = overdue.reduce((s, r) => s + Number(r.amount), 0)
-  const avgDSO = rows.length > 0
-    ? Math.round(rows.reduce((s, r) => s + Number(r.days_outstanding), 0) / rows.length)
+  const avgArAge = totalAR > 0
+    ? Math.round(rows.reduce((s, r) => s + Number(r.amount) * Number(r.days_outstanding), 0) / totalAR)
     : 0
 
   const bucketMap: Record<string, number> = {}
@@ -103,10 +103,10 @@ export default function CollectionsCharts() {
           <p className={`text-xl font-semibold tabular-nums ${overdueTotal > 100000 ? 'text-red-300' : ''}`}>{fmt(overdueTotal)}</p>
           <p className="text-[11px] text-muted-foreground">{overdue.length} invoices past due · {Math.round(overdueTotal / totalAR * 100)}% of AR</p>
         </Card>
-        <Card className={`px-3 py-2.5 ${avgDSO > 45 ? 'border-yellow-500/30 bg-yellow-500/5' : 'border-border bg-card'}`}>
-          <p className="text-[11px] text-muted-foreground uppercase tracking-wider">Avg DSO</p>
-          <p className={`text-xl font-semibold tabular-nums ${avgDSO > 45 ? 'text-yellow-300' : ''}`}>{avgDSO} days</p>
-          <p className="text-[11px] text-muted-foreground">Target: ≤45 days</p>
+        <Card className={`px-3 py-2.5 ${avgArAge > 45 ? 'border-yellow-500/30 bg-yellow-500/5' : 'border-border bg-card'}`}>
+          <p className="text-[11px] text-muted-foreground uppercase tracking-wider">Avg AR Age</p>
+          <p className={`text-xl font-semibold tabular-nums ${avgArAge > 45 ? 'text-yellow-300' : ''}`}>{avgArAge} days</p>
+          <p className="text-[11px] text-muted-foreground">Weighted by invoice $</p>
         </Card>
       </div>
 
