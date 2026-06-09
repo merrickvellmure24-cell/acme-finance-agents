@@ -74,9 +74,6 @@ export default function ActionItemsSidebar({
   const doneItems = items.filter(i => i.status === 'done').slice(0, 5)
 
   const hasSimActivity = isHypothetical && simApprovedItems.length > 0 && simDeltas
-  const runwayGain = simDeltas && simDeltas.monthlyBurnDelta !== 0
-    ? null  // complex — skip for now
-    : null
 
   return (
     <aside className="w-[28%] min-w-[260px] max-w-[360px] border-l border-border flex flex-col bg-card/30 flex-shrink-0">

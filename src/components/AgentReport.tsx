@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { marked } from 'marked'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 
 interface Props { report: string; agentName: string }

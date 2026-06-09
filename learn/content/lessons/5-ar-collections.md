@@ -2,7 +2,7 @@
 
 **Accounts Receivable (AR)** is money customers owe you for work already delivered. Until they pay, that cash is unavailable — you've done the work and spent the money, but the revenue is trapped.
 
-**DSO (Days Sales Outstanding)** measures collection speed: average days from invoice to payment. Lower is better.
+**DSO (Days Sales Outstanding)** measures collection speed using accounts receivable and credit sales over a period. Because this demo dataset has open invoices but not trailing credit sales, the dashboard uses **Avg AR Age** instead: a dollar-weighted average of how old the open receivables are. Lower is better.
 
 **Aging buckets** group invoices by how overdue they are:
 - Current (not yet due)
@@ -20,7 +20,7 @@ Acme has **15 open customer invoices** totaling significant AR, with **$186K ove
 | MidWest Fulfillment | $48K | 92 days | Critical — likely needs escalation |
 | Others | Various | Mixed | See Collections tab |
 
-Healthy B2B DSO: **30–45 days**. Above **60 days** is a collections problem. At 92 days, MidWest is approaching write-off territory.
+Healthy B2B DSO is often **30–45 days**, but use that only when you have sales data. For this dashboard, treat Avg AR Age above **45–60 days** as a collections warning. At 92 days, MidWest is approaching write-off territory.
 
 ## So what?
 

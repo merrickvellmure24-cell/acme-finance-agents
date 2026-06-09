@@ -32,7 +32,7 @@ KEY CONTEXT:
 - Today's date: June 3, 2026
 - MidWest Fulfillment Co: $48K, 92 days outstanding, last contact March 1 (94 days ago) — write-off risk
 - Healthy AR benchmark: >70% of AR in Current bucket
-- Industry DSO benchmark for B2B SaaS/services: 45-60 days
+- Since this dataset has open invoices but not trailing credit sales, calculate weighted average AR age instead of true DSO
 - $1.34M/month burn rate context
 
 Analyze and output in EXACTLY this format:
@@ -44,7 +44,7 @@ Analyze and output in EXACTLY this format:
 Number every step. Format: "What I found: [exact number] — Why this matters: [benchmark] — Implication: [business meaning]"
 
 Step 1: AR aging breakdown by bucket — Current | 1-30 days | 31-60 days | 61-90 days | 90+ days. Show $ amount and % of total for each. Compare to >70% current benchmark.
-Step 2: DSO calculation — (total AR ÷ average invoice amount) × 30. Compare to 45-60 day industry benchmark. Is this company collecting efficiently?
+Step 2: Weighted average AR age — sum(amount × days outstanding) ÷ total AR. Compare to a 45-day collection target and clearly state this is an aging proxy, not true DSO.
 Step 3: MidWest Fulfillment priority — $48K, 92 days, last contact 94 days ago. At 90+ days with no contact, this transitions from collections to write-off risk. Calculate: if written off, what is the runway impact in days? (total AR lost ÷ daily burn). Recommend VP-level escalation call, not email. 14-day payment plan deadline.
 Step 4: Collection priority stack-rank — rank ALL overdue invoices by ($ amount × days overdue). Show the ordered list. Highest product = call first.
 Step 5: Collectibility assessment — for each overdue invoice: HIGH/MEDIUM/LOW likelihood based on days outstanding and last contact. Total "likely collectible" vs "at risk of write-off" in dollars.
@@ -55,8 +55,8 @@ YELLOW: [invoices 30-90 days needing follow-up]
 GREEN: [current invoices and healthy collection metrics]
 
 ##REPORT##
-Open with: "What I analyzed: [sources]. What I was looking for: [collection risks and DSO]. What I found: [most important finding]."
-Then: full collections report with aging breakdown, DSO analysis, MidWest Fulfillment escalation recommendation, and the priority call list.`,
+Open with: "What I analyzed: [sources]. What I was looking for: [collection risks and AR aging]. What I found: [most important finding]."
+Then: full collections report with aging breakdown, AR age analysis, MidWest Fulfillment escalation recommendation, and the priority call list.`,
   })
 
   return text

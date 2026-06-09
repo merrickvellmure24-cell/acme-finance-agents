@@ -39,7 +39,7 @@ const DESCRIPTIONS: Record<string, string> = {
   'cash-reporter': 'Treasury liquidity — operating vs reserve cash, weekly burn trend, and runway.',
   'cash-forecast': 'Projects cash 9 months forward across 3 scenarios: current burn, burn discipline, and revenue acceleration.',
   'budget-analyst': 'Compares actual spend against budget for all 8 departments, explains variances, and projects year-end.',
-  'ar-collections': 'Tracks all 15 customer invoices, calculates DSO, and prioritizes who to call first.',
+  'ar-collections': 'Tracks all 15 customer invoices, calculates weighted AR age, and prioritizes who to call first.',
   'ap-vendor': 'Audits all 20 AP invoices for duplicates and unauthorized spend, then schedules legitimate payments.',
   'contract-watchdog': 'Scans all 26 vendor contracts for upcoming renewals, stale reviews, and unprotected spend.',
   'cfo-briefing': 'Synthesizes all 6 agent reports into a prioritized executive briefing with action items.',

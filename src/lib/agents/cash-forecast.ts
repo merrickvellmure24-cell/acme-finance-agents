@@ -1,9 +1,9 @@
 import { generateText } from 'ai'
 import { AGENT_MODELS } from '../llm'
-import { getCashBalance, getBudget, getTransactions } from '../db/queries'
+import { getCashBalance, getBudget } from '../db/queries'
 
 export async function runCashForecast(): Promise<string> {
-  const [cashRows, budgetRows, txRows] = await Promise.all([getCashBalance(), getBudget(), getTransactions()])
+  const [cashRows, budgetRows] = await Promise.all([getCashBalance(), getBudget()])
 
   const latestCash = cashRows[cashRows.length - 1]
   const recentBurns = cashRows.slice(-4).map(r => Number(r.weekly_burn))

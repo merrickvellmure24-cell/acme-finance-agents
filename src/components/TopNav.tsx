@@ -98,7 +98,7 @@ export default function TopNav({ activeTab, onTabChange, platformMode, onPlatfor
                       </>
                     )
                     return isExternal ? (
-                      <a key={href} href={href} target="_blank" rel="noreferrer" onClick={() => setResourcesOpen(false)} className={cls}>
+                      <a key={href} href={href} target="_blank" rel="noopener noreferrer" onClick={() => setResourcesOpen(false)} className={cls}>
                         {inner}
                       </a>
                     ) : (

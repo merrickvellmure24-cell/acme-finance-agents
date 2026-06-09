@@ -8,7 +8,7 @@ import type { AgentState } from './AgentPanel'
 import AgentChat from './AgentChat'
 import AgentStatusBar from './AgentStatusBar'
 import FinancialSnapshotCard from './charts/FinancialSnapshotCard'
-import type { HypotheticalInputs, AggregateSimDelta } from '@/lib/hypotheticals/scenarios'
+import type { AggregateSimDelta } from '@/lib/hypotheticals/scenarios'
 
 async function exportActionItemsCSV() {
   const items = await fetch('/api/action-items').then(r => r.json()).catch(() => [])
@@ -60,7 +60,6 @@ interface Props {
   agentStates: Record<string, AgentState>
   onJumpToTab: (tab: string) => void
   onRerun: () => void
-  hypoInputs?: HypotheticalInputs
   simDeltas?: AggregateSimDelta | null
 }
 
@@ -93,7 +92,7 @@ function extractAmount(text: string): string | null {
   return m ? m[0] : null
 }
 
-export default function CFOBriefing({ state, agentStates, onJumpToTab, onRerun, hypoInputs, simDeltas }: Props) {
+export default function CFOBriefing({ state, agentStates, onJumpToTab, onRerun, simDeltas }: Props) {
   const [analysisOpen, setAnalysisOpen] = useState(false)
   const [monitorOpen, setMonitorOpen] = useState(false)
   const prevStatus = useRef(state.status)
@@ -236,7 +235,10 @@ export default function CFOBriefing({ state, agentStates, onJumpToTab, onRerun, 
 
         {/* Financial Snapshot — single full-width card replacing two weak sparklines */}
         <section>
-          <FinancialSnapshotCard simCashDelta={simDeltas?.cashDelta ?? 0} />
+          <FinancialSnapshotCard
+            simCashDelta={simDeltas?.cashDelta ?? 0}
+            simMonthlyBurnDelta={simDeltas?.monthlyBurnDelta ?? 0}
+          />
         </section>
 
         {(redItems.length > 0 || yellowItems.length > 0) && (

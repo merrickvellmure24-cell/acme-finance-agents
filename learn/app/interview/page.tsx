@@ -16,7 +16,7 @@ const QA = {
     },
     {
       q: 'What finance domains does it cover?',
-      a: 'Cash position and burn, 9-month cash forecasting, departmental budget variance, accounts receivable collections with DSO tracking, accounts payable with fraud audit, and vendor contract risk. A seventh agent synthesizes everything into a CFO briefing.',
+      a: 'Cash position and burn, 9-month cash forecasting, departmental budget variance, accounts receivable collections with weighted AR-age tracking, accounts payable with fraud audit, and vendor contract risk. A seventh agent synthesizes everything into a CFO briefing.',
     },
     {
       q: 'How would this fit at a firm like Vanguard?',

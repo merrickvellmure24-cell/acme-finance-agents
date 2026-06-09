@@ -27,7 +27,7 @@ const AGENTS = [
   },
   {
     icon: '📥', name: 'Collections', tag: 'Money owed to us',
-    desc: 'Tracks every open customer invoice — who owes money, how many days overdue, and which accounts need an urgent collection call. Calculates DSO (days to collect).',
+    desc: 'Tracks every open customer invoice — who owes money, how many days overdue, and which accounts need an urgent collection call. Calculates weighted AR age as a collections proxy.',
   },
   {
     icon: '📤', name: 'Payables & Vendors', tag: 'Money we owe',
@@ -53,7 +53,7 @@ const TERMS = [
   { term: 'Runway', def: 'How many months until the company runs out of money at the current burn rate. Formula: Total Cash ÷ Monthly Burn. Target is 18+ months. Currently ~9.5 months — a concern.' },
   { term: 'AR (Accounts Receivable)', def: 'Money that customers owe Acme Robotics for services already delivered. These are outstanding invoices. "Overdue AR" means customers are late paying — this directly tightens cash flow.' },
   { term: 'AP (Accounts Payable)', def: 'Money that Acme Robotics owes to vendors. "AP at risk" means invoices that may be duplicates, unauthorized, or disputed — money that shouldn\'t be paid without review.' },
-  { term: 'DSO (Days Sales Outstanding)', def: 'The average number of days it takes to collect payment after an invoice is sent. Lower is better. Healthy B2B range: 30–45 days. Above 60 days is a collections problem.' },
+  { term: 'Avg AR Age', def: 'Dollar-weighted average age of open receivables. It is not true DSO because this demo data does not include trailing credit sales, but it is a useful collections-risk proxy.' },
   { term: 'Budget Variance', def: 'Difference between planned budget and actual spending. "Over budget" means a department spent more than approved. Shown as both a dollar amount and a percentage.' },
 ]
 
@@ -132,7 +132,7 @@ export default function WelcomePage() {
             </div>
             <div className="px-6 py-4 border-r border-border">
               <p className="text-[11px] text-muted-foreground uppercase tracking-wider mb-1">AR Overdue</p>
-              <p className="text-2xl font-semibold tabular-nums text-orange-400">{metrics ? fmt(metrics.arOverdue) : '$184K'}</p>
+              <p className="text-2xl font-semibold tabular-nums text-orange-400">{metrics ? fmt(metrics.arOverdue) : '$186K'}</p>
             </div>
             <div className="px-6 py-4">
               <p className="text-[11px] text-muted-foreground uppercase tracking-wider mb-1">Employees</p>
@@ -164,7 +164,7 @@ export default function WelcomePage() {
                 large enterprise contracts.
               </p>
               <p className="text-muted-foreground leading-relaxed">
-                This dashboard gives any observer full CFO-level visibility into the company's
+                This dashboard gives any observer full CFO-level visibility into the company&apos;s
                 financial health — the same view the finance team monitors every day.
               </p>
             </div>
@@ -175,11 +175,11 @@ export default function WelcomePage() {
               </div>
               <div className="rounded-lg border border-orange-500/20 bg-orange-500/5 px-4 py-3">
                 <p className="text-[11px] text-orange-400 uppercase tracking-widest font-semibold mb-1">Collections at Risk</p>
-                <p className="text-sm text-foreground/90"><strong className="text-white">$184K</strong> in overdue receivables — MidWest Fulfillment is 92 days past due on a $48K invoice.</p>
+                <p className="text-sm text-foreground/90"><strong className="text-white">$186K</strong> in overdue receivables — MidWest Fulfillment is 92 days past due on a $48K invoice.</p>
               </div>
               <div className="rounded-lg border border-yellow-500/20 bg-yellow-500/5 px-4 py-3">
                 <p className="text-[11px] text-yellow-400 uppercase tracking-widest font-semibold mb-1">Vendor Risk</p>
-                <p className="text-sm text-foreground/90"><strong className="text-white">$25.5K</strong> in potential duplicate Apex Logistics invoices flagged by the AP fraud audit.</p>
+                <p className="text-sm text-foreground/90"><strong className="text-white">$14.5K</strong> in potential duplicate Apex Logistics invoices flagged by the AP fraud audit.</p>
               </div>
             </div>
           </div>
@@ -189,7 +189,7 @@ export default function WelcomePage() {
         <section id="how-it-works" className="py-10 border-t border-border">
           <p className="text-xs text-muted-foreground uppercase tracking-widest font-semibold mb-2">How It Works</p>
           <h2 className="text-2xl font-semibold mb-2">Three steps to full situational awareness</h2>
-          <p className="text-muted-foreground mb-8">You don't need any financial background to use this platform. Follow these three steps.</p>
+          <p className="text-muted-foreground mb-8">You don&apos;t need any financial background to use this platform. Follow these three steps.</p>
           <div className="grid md:grid-cols-3 gap-5">
             {[
               {
@@ -253,7 +253,7 @@ export default function WelcomePage() {
               <p className="text-sm text-muted-foreground leading-relaxed">
                 Operating normally based on current data and historical patterns.
                 The AI confirmed this area looks healthy. GREEN findings are included
-                so you know exactly what was checked, not just what's broken.
+                so you know exactly what was checked, not just what&apos;s broken.
               </p>
             </div>
           </div>
@@ -265,7 +265,7 @@ export default function WelcomePage() {
           <h2 className="text-2xl font-semibold mb-2">7 specialized financial analysts</h2>
           <p className="text-muted-foreground mb-8">
             Each agent monitors a specific financial domain independently. They all run in parallel
-            when you click "Run All Agents," and each has its own live chart view you can explore.
+            when you click &quot;Run All Agents,&quot; and each has its own live chart view you can explore.
           </p>
           <div className="grid md:grid-cols-2 gap-4">
             {AGENTS.map(a => (
@@ -290,7 +290,7 @@ export default function WelcomePage() {
           <p className="text-xs text-muted-foreground uppercase tracking-widest font-semibold mb-2">The Data</p>
           <h2 className="text-2xl font-semibold mb-2">Where the numbers come from</h2>
           <p className="text-muted-foreground mb-8">
-            All data lives in a Turso (SQLite) cloud database, loaded from Acme Robotics' actual
+            All data lives in a Turso (SQLite) cloud database, loaded from Acme Robotics&apos; actual
             financial spreadsheets. The AI agents query this database directly when they run.
             Nothing is made up — every number reflects a real record.
           </p>
@@ -345,13 +345,13 @@ export default function WelcomePage() {
         {/* ── Feedback ask ────────────────────────────────────── */}
         <section className="py-10 border-t border-border">
           <p className="text-xs text-muted-foreground uppercase tracking-widest font-semibold mb-2">For Reviewers</p>
-          <h2 className="text-2xl font-semibold mb-4">What we're looking for feedback on</h2>
+          <h2 className="text-2xl font-semibold mb-4">What we&apos;re looking for feedback on</h2>
           <div className="grid md:grid-cols-2 gap-3">
             {[
               { n: '1', q: 'Clarity', desc: 'Is it immediately obvious what each section shows? Could a finance-adjacent non-expert understand the findings without explanation?' },
               { n: '2', q: 'Actionability', desc: 'Do the AI findings feel specific and useful? Or are they too vague? Would a real CFO act on them, or would they need more detail?' },
               { n: '3', q: 'Navigation', desc: 'Is the flow intuitive? Can you find what you\'re looking for? Does the sidebar organization make sense?' },
-              { n: '4', q: 'Missing features', desc: 'What would you want to see that isn\'t here? What would make this a platform you\'d actually open every morning?' },
+              { n: '4', q: 'Missing features', desc: 'What would you want to see that is not here? What would make this a platform you would actually open every morning?' },
             ].map(f => (
               <div key={f.n} className="rounded-lg border border-border p-4 flex gap-3">
                 <span className="text-2xl font-bold text-muted-foreground/20 font-mono leading-none mt-0.5">{f.n}</span>
@@ -375,7 +375,7 @@ export default function WelcomePage() {
           <Link href="/" className="inline-flex items-center gap-2 px-8 py-3.5 bg-primary text-primary-foreground font-medium rounded-lg hover:bg-primary/90 transition text-base">
             Enter Dashboard →
           </Link>
-          <p className="text-xs text-muted-foreground/40 mt-4">You can always return to this page from the "Platform Guide" link in the sidebar.</p>
+          <p className="text-xs text-muted-foreground/40 mt-4">You can always return to this page from the &quot;Platform Guide&quot; link in the sidebar.</p>
         </section>
 
       </div>

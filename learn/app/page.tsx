@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { LESSONS } from '@/lib/lessons'
+import { DASHBOARD_URL, LESSONS } from '@/lib/lessons'
 
 export default function HomePage() {
   return (
@@ -17,7 +17,7 @@ export default function HomePage() {
       <section className="mb-10 p-5 rounded-lg border border-border bg-card">
         <h2 className="text-sm font-semibold text-foreground mb-3">How to use this course</h2>
         <ol className="text-sm text-muted-foreground space-y-2 list-decimal ml-5">
-          <li>Open the <strong className="text-foreground">dashboard</strong> at <a href="https://acme-finance-agents.vercel.app" target="_blank" rel="noreferrer" className="text-primary hover:underline">acme-finance-agents.vercel.app</a></li>
+          <li>Open the <strong className="text-foreground">dashboard</strong> at <a href={DASHBOARD_URL} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">acme-finance-agents.vercel.app</a></li>
           <li>Read each lesson here and complete the <strong className="text-foreground">Try it</strong> step in the dashboard after each one</li>
           <li>Use <strong className="text-foreground">Glossary</strong> and <strong className="text-foreground">Screen Guide</strong> as reference while exploring</li>
           <li>Before an interview, rehearse <strong className="text-foreground">Interview Prep</strong></li>

@@ -42,7 +42,7 @@ SIX AGENT REPORTS:
 ${context}
 
 SYNTHESIS INSTRUCTIONS:
-- Find connections BETWEEN agents that neither would catch alone (e.g., Cash Reporter's burn + AP Vendor's $25.5K unauthorized = single root cause: financial controls degraded when VP Finance left)
+- Find connections BETWEEN agents that neither would catch alone (e.g., Cash Reporter's burn + AP Vendor's duplicate invoice findings = single root cause: financial controls degraded when VP Finance left)
 - Rank issues ACROSS domains — a $48K AR write-off risk matters MORE than a $3K travel underspend
 - Every recommendation must be: what action, why it can't wait, dollar/runway consequence of inaction
 - The CFO should never feel like they're trusting a black box
@@ -57,7 +57,7 @@ Output in EXACTLY this format:
 Number every synthesis step. Show the connections explicitly.
 
 Step 1: Cash + Forecast synthesis — what do burn rate and runway projections tell us together? Quote specific numbers from both agents. What is the combined implication?
-Step 2: AP fraud + Cash connection — the $25.5K+ in duplicate/unauthorized AP. What does this mean for cash? How many days of runway is at stake?
+Step 2: AP fraud + Cash connection — quote the duplicate/unauthorized AP amount from the Payables report. What does this mean for cash? How many days of runway is at stake?
 Step 3: AR write-off risk + Cash Forecast connection — if MidWest Fulfillment ($48K) writes off, how does that change the Forecast's Base Case? Quantify the runway impact in days.
 Step 4: Budget process gap + Future cash risk — the CEO-approved expenses that bypassed budget. If this continues unchecked, what is the risk to cash planning accuracy?
 Step 5: Contract renewal + Cash planning — the Salesforce renewal in Sept 2026. If it auto-renews at current rate with no negotiation, what is the cash impact vs negotiating a 20% reduction?

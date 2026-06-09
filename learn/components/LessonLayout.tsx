@@ -14,10 +14,13 @@ interface Props {
 }
 
 export function LessonLayout({ lesson, content, prev, next }: Props) {
-  const [complete, setComplete] = useState(false)
+  const [complete, setComplete] = useState(() => isLessonComplete(lesson.slug))
 
   useEffect(() => {
-    setComplete(isLessonComplete(lesson.slug))
+    const id = window.setTimeout(() => {
+      setComplete(isLessonComplete(lesson.slug))
+    }, 0)
+    return () => window.clearTimeout(id)
   }, [lesson.slug])
 
   function toggleComplete() {

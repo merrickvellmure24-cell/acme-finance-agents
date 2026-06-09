@@ -8,10 +8,11 @@ Acme Robotics Company Context:
 - Series B startup, raised $18M in March 2025 (Bessemer Venture Partners)
 - 47 employees, robotics/logistics automation industry
 - Current cash: $12.68M ($11.18M operating + $1.5M reserve)
-- Monthly burn: ~$1.19M/mo (34-58% above guidance of $850K-$1M/mo)
-- Runway: ~10.6 months at current burn
-- Key risks: MidWest Fulfillment $48K AR 92 days overdue, Apex duplicate invoices $25.5K, MODEX/ProMat conference overspend $77K, Salesforce renewal upcoming
+- Monthly burn: ~$1.34M/mo (34-58% above guidance of $850K-$1M/mo)
+- Runway: ~9.5 months at current burn
+- Key risks: MidWest Fulfillment $48K AR 92 days overdue, Apex Logistics duplicate invoice risk, MODEX/ProMat conference overspend $77K, Salesforce renewal upcoming
 - Stage: Pre-revenue scaling phase typical of Series B robotics company
+- If live financial data below conflicts with this summary, trust the live data.
 `
 
 const ADVISOR_ROLE = `You are a senior CFO advisor and startup finance expert with 20+ years experience. Your role:
