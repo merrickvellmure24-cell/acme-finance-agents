@@ -45,7 +45,7 @@ export function LessonLayout({ lesson, content, prev, next }: Props) {
         <div className="my-8 p-4 rounded-lg border border-border bg-card">
           <p className="text-xs font-mono uppercase tracking-widest text-muted-foreground mb-2">Open the dashboard</p>
           <p className="text-sm text-muted-foreground mb-3">
-            Switch to <strong>{lesson.dashboardTab}</strong> in the sidebar at localhost:3000.
+            Click <strong>{lesson.dashboardTab}</strong> in the top nav on the dashboard.
           </p>
           <a
             href={DASHBOARD_URL}

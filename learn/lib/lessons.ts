@@ -81,7 +81,7 @@ export const LESSONS: LessonMeta[] = [
   },
 ]
 
-export const DASHBOARD_URL = 'http://localhost:3000'
+export const DASHBOARD_URL = 'https://acme-finance-agents.vercel.app'
 
 export function lessonHref(slug: string) {
   return `/lessons/${slug}`

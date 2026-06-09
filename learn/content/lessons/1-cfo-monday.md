@@ -42,7 +42,7 @@ See the [Screen Guide](/screens) entries for **KPI Bar** and **CFO Briefing**.
 
 ## Try it
 
-1. Open the dashboard at `localhost:3000`
+1. Open the dashboard at [acme-finance-agents.vercel.app](https://acme-finance-agents.vercel.app)
 2. Click **↻ Update** (top right) and watch the button count progress (e.g., `◌ 3/7`)
 3. On CFO Briefing, read the **Executive Pulse** section
 4. Count how many RED vs YELLOW vs GREEN findings appear
