@@ -8,7 +8,10 @@ export interface ParsedAgentOutput {
   needsEscalation: boolean
 }
 
-export default function parseAgentOutput(text: string): ParsedAgentOutput {
+export default function parseAgentOutput(rawText: string): ParsedAgentOutput {
+  // Strip <think>...</think> blocks emitted by reasoning models (e.g. Qwen3.6-27B raw format)
+  const text = rawText.replace(/<think>[\s\S]*?<\/think>/gi, '').trim()
+
   const empty: ParsedAgentOutput = {
     dataScanned: [],
     reasoningSteps: [],

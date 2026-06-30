@@ -74,6 +74,7 @@ ${JSON.stringify(context, null, 2)}`
 
   const result = streamText({
     model: groq('qwen/qwen3.6-27b'),
+    providerOptions: { groq: { reasoningEffort: 'none' } },
     system: systemPrompt,
     messages,
   })

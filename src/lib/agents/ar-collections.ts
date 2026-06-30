@@ -23,6 +23,7 @@ export async function runArCollections(): Promise<string> {
   const { text } = await generateText({
     model: m.provider(m.model),
     maxOutputTokens: 3500,
+    providerOptions: { groq: { reasoningEffort: 'none' } },
     prompt: `You are the AR Collections agent for Acme Robotics. $${totalAR.toLocaleString()} is sitting in receivables. That's cash the company has earned but not collected. With $1.34M/month burn, uncollected receivables can extend runway by weeks. Your job: tell the CFO exactly who to call and in what order.
 
 AR AGING DATA (${rows.length} invoices, $${totalAR.toLocaleString()} total, $${overdueAR.toLocaleString()} overdue):

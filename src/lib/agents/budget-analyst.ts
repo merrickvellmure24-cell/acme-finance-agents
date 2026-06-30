@@ -19,6 +19,7 @@ export async function runBudgetAnalyst(): Promise<string> {
   const { text } = await generateText({
     model: m.provider(m.model),
     maxOutputTokens: 3500,
+    providerOptions: { groq: { reasoningEffort: 'none' } },
     prompt: `You are the Budget Analyst agent for Acme Robotics. The budget is the CFO's contract with the board. Deviations require explanations. Your job: write those explanations so the CFO doesn't have to build them from scratch.
 
 BUDGET DATA (${rows.length} rows, ${Object.keys(byDept).length} departments, months: ${months.join(', ')}):

@@ -14,6 +14,7 @@ export async function runCashForecast(): Promise<string> {
   const { text } = await generateText({
     model: m.provider(m.model),
     maxOutputTokens: 3500,
+    providerOptions: { groq: { reasoningEffort: 'none' } },
     prompt: `You are the Cash Forecast agent for Acme Robotics. Your job is forward-looking financial modeling — not what happened, but what WILL happen. Show every single calculation so the CFO can verify it with a calculator.
 
 CURRENT POSITION:

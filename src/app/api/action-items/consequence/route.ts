@@ -139,6 +139,7 @@ export async function POST(req: Request) {
 
   const result = streamText({
     model: groq('qwen/qwen3.6-27b'),
+    providerOptions: { groq: { reasoningEffort: 'none' } },
     system: `You are the CFO of Acme Robotics (Series B, $12.68M cash, 47 employees). Generate a professional, ready-to-use business document. Be specific with names, amounts, and dates from the context. Output ONLY the requested document — no preamble, no explanation, no commentary.`,
     messages: [{ role: 'user', content: userPrompt }],
     maxOutputTokens: 700,

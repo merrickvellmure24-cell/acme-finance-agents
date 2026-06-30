@@ -20,6 +20,7 @@ export async function runContractWatchdog(): Promise<string> {
   const { text } = await generateText({
     model: m.provider(m.model),
     maxOutputTokens: 3000,
+    providerOptions: { groq: { reasoningEffort: 'none' } },
     prompt: `You are the Contract Watchdog agent for Acme Robotics. With the VP of Finance gone, no one is watching contract renewals. An auto-renewing Salesforce contract at $50K with no negotiation is a real risk. You are the contract manager the company no longer has.
 
 VENDOR DATA (${vendors.length} vendors, $${totalMonthlySpend.toLocaleString()}/month total spend):
