@@ -26,23 +26,23 @@ export const openrouter = createOpenAICompatible({
 // CFO briefing runs after all 6 → SambaNova DeepSeek-V3.2 (largest free model)
 export const AGENT_MODELS = {
   'cash-reporter':     { provider: cerebras,  model: 'gpt-oss-120b',                  providerName: 'Cerebras' },
-  'cash-forecast':     { provider: groq,      model: 'llama-3.3-70b-versatile',        providerName: 'Groq' },
-  'budget-analyst':    { provider: groq,      model: 'llama-3.3-70b-versatile',        providerName: 'Groq' },
-  'ar-collections':    { provider: groq,      model: 'llama-3.3-70b-versatile',        providerName: 'Groq' },
+  'cash-forecast':     { provider: groq,      model: 'qwen/qwen3.6-27b',              providerName: 'Groq' },
+  'budget-analyst':    { provider: groq,      model: 'qwen/qwen3.6-27b',              providerName: 'Groq' },
+  'ar-collections':    { provider: groq,      model: 'qwen/qwen3.6-27b',              providerName: 'Groq' },
   'ap-vendor':         { provider: sambanova, model: 'DeepSeek-V3.2',                  providerName: 'SambaNova' },
-  'contract-watchdog': { provider: groq,      model: 'llama-3.3-70b-versatile',        providerName: 'Groq' },
+  'contract-watchdog': { provider: groq,      model: 'qwen/qwen3.6-27b',              providerName: 'Groq' },
   'cfo-briefing':      { provider: sambanova, model: 'DeepSeek-V3.2',                  providerName: 'SambaNova' },
-  'chat':              { provider: groq,      model: 'llama-3.3-70b-versatile',        providerName: 'Groq' },
+  'chat':              { provider: groq,      model: 'qwen/qwen3.6-27b',              providerName: 'Groq' },
   // Interactive routes (analyze, consequence, chat) → always Groq for high rate limits
 
 } as const;
 
 // Legacy alias for existing agent files
 export const MODELS = {
-  cash:       { provider: groq,      model: 'llama-3.3-70b-versatile' },
-  budget:     { provider: groq,      model: 'llama-3.3-70b-versatile' },
+  cash:       { provider: groq,      model: 'qwen/qwen3.6-27b' },
+  budget:     { provider: groq,      model: 'qwen/qwen3.6-27b' },
   vendor:     { provider: sambanova, model: 'DeepSeek-V3.2' },
-  ap_ar:      { provider: groq,      model: 'llama-3.3-70b-versatile' },
+  ap_ar:      { provider: groq,      model: 'qwen/qwen3.6-27b' },
   escalation: { provider: sambanova, model: 'DeepSeek-V3.2' },
-  chat:       { provider: groq,      model: 'llama-3.3-70b-versatile' },
+  chat:       { provider: groq,      model: 'qwen/qwen3.6-27b' },
 };

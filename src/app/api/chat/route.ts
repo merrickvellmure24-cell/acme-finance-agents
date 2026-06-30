@@ -73,7 +73,7 @@ Current financial data:
 ${JSON.stringify(context, null, 2)}`
 
   const result = streamText({
-    model: groq('llama-3.3-70b-versatile'),
+    model: groq('qwen/qwen3.6-27b'),
     system: systemPrompt,
     messages,
   })

@@ -138,7 +138,7 @@ export async function POST(req: Request) {
     + `\n\nRelevant financial data for context:\n${JSON.stringify(context, null, 2)}`
 
   const result = streamText({
-    model: groq('llama-3.3-70b-versatile'),
+    model: groq('qwen/qwen3.6-27b'),
     system: `You are the CFO of Acme Robotics (Series B, $12.68M cash, 47 employees). Generate a professional, ready-to-use business document. Be specific with names, amounts, and dates from the context. Output ONLY the requested document — no preamble, no explanation, no commentary.`,
     messages: [{ role: 'user', content: userPrompt }],
     maxOutputTokens: 700,

@@ -24,11 +24,11 @@ interface ActionItem { id: number; created_at: string; source_agent: string; des
 const AGENT_CONFIG: Record<AgentKey, { label: string; model: string; provider: string; emoji: string }> = {
   'briefing':          { label: 'CFO Briefing',  model: 'DeepSeek-V3.2',          provider: 'SambaNova', emoji: '🏦' },
   'cash-reporter':     { label: 'Treasury',       model: 'gpt-oss-120b',            provider: 'Cerebras',  emoji: '🏛️' },
-  'cash-forecast':     { label: 'Cash Forecast',  model: 'llama-3.3-70b-versatile', provider: 'Groq',      emoji: '📈' },
-  'budget-analyst':    { label: 'Budget',          model: 'llama-3.3-70b-versatile', provider: 'Groq',      emoji: '📊' },
-  'ar-collections':    { label: 'Collections',    model: 'llama-3.3-70b-versatile', provider: 'Groq',      emoji: '📥' },
+  'cash-forecast':     { label: 'Cash Forecast',  model: 'qwen/qwen3.6-27b', provider: 'Groq',      emoji: '📈' },
+  'budget-analyst':    { label: 'Budget',          model: 'qwen/qwen3.6-27b', provider: 'Groq',      emoji: '📊' },
+  'ar-collections':    { label: 'Collections',    model: 'qwen/qwen3.6-27b', provider: 'Groq',      emoji: '📥' },
   'ap-vendor':         { label: 'Payables',        model: 'DeepSeek-V3.2',           provider: 'SambaNova', emoji: '📤' },
-  'contract-watchdog': { label: 'Contracts',       model: 'llama-3.3-70b-versatile', provider: 'Groq',      emoji: '📋' },
+  'contract-watchdog': { label: 'Contracts',       model: 'qwen/qwen3.6-27b', provider: 'Groq',      emoji: '📋' },
 }
 
 const AGENT_KEYS: AgentKey[] = ['briefing','cash-reporter','cash-forecast','budget-analyst','ar-collections','ap-vendor','contract-watchdog']
